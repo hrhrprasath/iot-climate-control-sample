@@ -1,0 +1,172 @@
+<!--
+Copyright 2014, 2015, 2016 IBM Corp.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+
+<!-- Device Properties-->
+
+
+<script type="text/x-red" data-template-name="set properties">
+<div class="form-row">
+<label for="node-input-name" style="width:130px;"><i class="fa fa-tag"></i> Name</label>
+<input type="text" id="node-input-name" placeholder="set device properties" style="width:300px;">
+</div>
+
+
+<div class="form-row">
+<label for="node-input-deviceId" style="width:130px;"><i class="fa fa-street-view"></i> Device Id</label>
+<input type="text" id="node-input-deviceId"  style="width:300px;">
+</div>
+
+<div class="form-row" id = "node-input-schema-div">
+<label for="node-input-schema" id="node-input-schemaLabel" style="width:130px;"><i class="fa fa-sitemap"></i> Device Schema</label>
+<input type="text" id="node-input-schema" style="width:300px;">
+</div>
+
+
+<div class="form-row">
+<input type="checkbox" id="node-input-propAll" style="width:10px;" >
+<label for="node-input-propAll" id="node-input-propAllLabel" style="width:auto;">Set all properies from msg.payload </label>
+</div>
+
+
+<div class="form-row hidden" id = "node-input-prop-div">
+<label for="node-input-prop" style="width:130px;"><i class="fa fa-cog"></i> Property</label>
+<select id="node-input-prop"  style="width:300px;">
+</select>
+</div>
+
+<div class="form-row hidden" id = "node-input-value-div">
+<label for="node-input-value" style="width:130px;"><i class="fa fa-database"></i> Value</label>
+<input type="text" id="node-input-value" style="width:300px;">
+<input type="hidden" id="node-input-valueType">
+</div>
+
+
+<div class="form-tips"><b>Tip:</b> Leave the device Id blank if you want to set it by using <b>msg.payload.deviceId</b>.</div>
+</script>
+
+
+<script type="text/x-red" data-help-name="set properties">
+<p>
+Sets the properties values of a virtual device directly from a message payload.
+</p>
+<p>
+Example: Connect the IBM IoT Input node to this node to set a device instance property directly from an IoT command.
+</p>
+<p>
+<b>Important:</b> The Device Schema property is optional. If you define a Device Schema but the device instance defined by the deviceId does not match the schema the flow will stop.
+</p>
+<dl>
+  <dt>Input:</dt>
+  <dd>
+	<ul>
+	<li><code>msg.payload.deviceId</code>: The device ID</li>
+	<li><code>msg.payload</code> or <code>msg.payload.d</code> A Javascript object that contains the payload. The value of every element in the payload
+	that has the same name as a property, will be copied to that property. Use this to allow direct input from IBM IoT input nodes.</li>
+	</ul>
+	</dd>
+  <dt>Output:</dt>
+  <dd>
+	<ul>
+	<li><code>msg.payload.deviceId</code>: The Id of the virtual device.</li>
+	<li><code>msg.payload.deviceType</code>: The type of the virtual device.</li>
+	<li><code>msg.payload.properties</code>: An object that contains the properties and values of the virtual device (e.g. {temperature: 20}).</li>
+	</ul>
+	</dd>
+</dl>
+</script>
+
+
+
+<script type="text/javascript">
+RED.nodes.registerType('set properties',{
+	category: 'Virtual_IoT_Device',
+	color:"#8C9BA5",
+	defaults: {
+		deviceId: {value:""},
+		schema: {type:"Device Schema", required: false, validate:
+		function(v) {
+			return ( ( (v === '_ADD_')  && ($("#node-input-propAll").is(":checked") === false) )  === false);
+		}},
+		name: { value:"" },
+		propAll: {value: true},
+		prop: {value: "", validate:
+		function(v) {
+			return ( ( (v === '')  && ($("#node-input-propAll").is(":checked") === false) )  === false);
+		}},
+		valueType: {value: "msg", function(v) {
+			return ( ( (v === '')  && ($("#node-input-propAll").is(":checked") === false) )  === false);
+		}},
+		value: {value: "payload", function(v) {
+			return ( ( (v === '')  && ($("#node-input-propAll").is(":checked") === false) )  === false);
+		}},
+
+	},
+	inputs:1,
+	outputs:1,
+	icon: "vdProperties.png",
+	label: function() {
+		return this.name || "set device properties";
+	},
+	labelStyle: function() {
+		return this.name ? "node_label_italic" : "";
+	},
+	oneditsave: function() {
+	},
+	oneditprepare: function() {
+		var _this = this;
+
+		$('#node-input-value').typedInput({
+				default: 'msg',
+				typeField: $("#node-input-valueType"),
+				types:['msg', 'flow','global','str', 'num','bool','json','date']
+		});
+
+		function populatePropertiesFromSchema(schemaId){
+			$('#node-input-prop').find('option').remove();
+			if(!schemaId || schemaId === "") return;
+			RED.nodes.eachConfig(function(config) {
+				if(schemaId === config.id){
+					for (var i=0; i<config.props.length; i++) {
+						var prp = config.props[i];
+						$('#node-input-prop').append($('<option>', {
+							value: prp.guid,
+							text: prp.name
+						}));
+					}
+				}
+			});
+			$("#node-input-prop").val(_this.prop);
+		}
+
+
+		$("#node-input-schema").change(function() {
+			var schemaId = $("#node-input-schema").val();
+			populatePropertiesFromSchema(schemaId);
+		});
+
+		$("#node-input-propAll").change(function(){
+			var allPropsSelected = $("#node-input-propAll").is(":checked");
+			(!allPropsSelected)? $("#node-input-prop-div").show() : $("#node-input-prop-div").hide();
+			(!allPropsSelected)? $("#node-input-value-div").show() : $("#node-input-value-div").hide();
+		});
+
+		populatePropertiesFromSchema(this.schema);
+
+	}
+});
+
+</script>

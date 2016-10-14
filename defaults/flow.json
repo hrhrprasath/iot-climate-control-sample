@@ -1,0 +1,2225 @@
+[{
+	"id": "cf2f140b.3f783",
+	"type": "tab",
+	"label": "Monitoring Flow"
+}, {
+	"id": "c3271096.6f1c08",
+	"type": "tab",
+	"label": "Alert Configuration"
+}, {
+	"id": "33084d1a.60af72",
+	"type": "tab",
+	"label": "Virtual Thermostat"
+}, {
+	"id": "31cee127.08c1a6",
+	"type": "tab",
+	"label": "Simulation Dashboard"
+}, {
+	"id": "90969cec.056bc",
+	"type": "subflow",
+	"name": "Alarm/Alert check",
+	"info": "",
+	"in": [{
+		"x": 63,
+		"y": 109,
+		"wires": [{
+			"id": "9046cf9d.d6a83"
+		}]
+	}],
+	"out": [{
+		"x": 751,
+		"y": 111,
+		"wires": [{
+			"id": "9b297a5.c044c88",
+			"port": 1
+		}, {
+			"id": "9b297a5.c044c88",
+			"port": 0
+		}]
+	}, {
+		"x": 1044,
+		"y": 195,
+		"wires": [{
+			"id": "99a63c4e.17e72",
+			"port": 0
+		}]
+	}]
+}, {
+	"id": "175817de.c3752",
+	"type": "subflow",
+	"name": "Alert Service Engineer",
+	"info": "",
+	"in": [{
+		"x": 70.44444274902344,
+		"y": 98.11110305786133,
+		"wires": [{
+			"id": "1ef1baa5.1d3685"
+		}]
+	}],
+	"out": []
+}, {
+	"id": "181edd10.83d50b",
+	"type": "cloudant",
+	"z": "cf2f140b.3f783",
+	"host": "https://60e6399c-2278-4b67-b6e6-dcb75924dd4f-bluemix:666db1c15b79d1a4900fb59d83d46f4a8685b44cd0a0fcdfdf9879c9579f455f@60e6399c-2278-4b67-b6e6-dcb75924dd4f-bluemix.cloudant.com",
+	"name": "db"
+}, {
+	"id": "ab27421e.a54d7",
+	"type": "ui_group",
+	"z": "",
+	"name": "Thermostat Status",
+	"tab": "3f2340dd.4e5f5",
+	"order": 1,
+	"disp": true,
+	"width": "6"
+}, {
+	"id": "5576a04a.869e08",
+	"type": "ui_tab",
+	"z": "",
+	"name": "Alert",
+	"icon": "dashboard",
+	"order": 2
+}, {
+	"id": "b561db29.33fd2",
+	"type": "Device Schema",
+	"z": "",
+	"deviceType": "Thermostat",
+	"props": [{
+		"guid": "7c896d407b7f",
+		"name": "ActualTemperature",
+		"defaultValue": {
+			"type": "num",
+			"value": "32"
+		}
+	}, {
+		"guid": "50347ee435f0",
+		"name": "DesiredTemperature",
+		"defaultValue": {
+			"type": "num",
+			"value": "23"
+		}
+	}, {
+		"guid": "be6df8b37d4d",
+		"name": "Location",
+		"defaultValue": {
+			"type": "str",
+			"value": "Store1: Room1"
+		}
+	}],
+	"evts": [{
+		"guid": "a0f0dab2a891",
+		"name": "getActualTemperature",
+		"payload": {
+			"properties": {
+				"0": "7c896d407b7f",
+				"length": 1,
+				"prevObject": {
+					"0": "7c896d407b7f",
+					"length": 1,
+					"prevObject": {
+						"0": {},
+						"length": 1,
+						"prevObject": {
+							"0": {
+								"sizzle1476360877178": {
+									"parentNode": [
+										22000,
+										47,
+										true
+									]
+								}
+							},
+							"selector": ".red-ui-editableList-item-content",
+							"context": {},
+							"length": 1
+						},
+						"context": {},
+						"selector": ".red-ui-editableList-item-content .node-input-evts-payload option:selected"
+					},
+					"context": {}
+				},
+				"context": {}
+			}
+		}
+	}, {
+		"guid": "f5e261ed3706",
+		"name": "getAll",
+		"payload": {
+			"properties": {
+				"0": "7c896d407b7f",
+				"1": "50347ee435f0",
+				"2": "be6df8b37d4d",
+				"length": 3,
+				"prevObject": {
+					"0": "7c896d407b7f",
+					"1": "50347ee435f0",
+					"2": "be6df8b37d4d",
+					"length": 3,
+					"prevObject": {
+						"0": {},
+						"1": {},
+						"2": {},
+						"length": 3,
+						"prevObject": {
+							"0": {
+								"sizzle1476360877178": {
+									"parentNode": [
+										22001,
+										47,
+										true
+									]
+								}
+							},
+							"selector": ".red-ui-editableList-item-content",
+							"context": {},
+							"length": 1
+						},
+						"context": {},
+						"selector": ".red-ui-editableList-item-content .node-input-evts-payload option:selected"
+					},
+					"context": {}
+				},
+				"context": {}
+			}
+		}
+	}, {
+		"guid": "db8c816b19bb",
+		"name": "getDesiredTemperature",
+		"payload": {
+			"properties": {
+				"0": "50347ee435f0",
+				"length": 1,
+				"prevObject": {
+					"0": "50347ee435f0",
+					"length": 1,
+					"prevObject": {
+						"0": {},
+						"length": 1,
+						"prevObject": {
+							"0": {
+								"sizzle1476360877178": {
+									"parentNode": [
+										22002,
+										47,
+										true
+									]
+								}
+							},
+							"selector": ".red-ui-editableList-item-content",
+							"context": {},
+							"length": 1
+						},
+						"context": {},
+						"selector": ".red-ui-editableList-item-content .node-input-evts-payload option:selected"
+					},
+					"context": {}
+				},
+				"context": {}
+			}
+		}
+	}, {
+		"guid": "8c11465b27e5",
+		"name": "getLocation",
+		"payload": {
+			"properties": {
+				"0": "be6df8b37d4d",
+				"length": 1,
+				"prevObject": {
+					"0": "be6df8b37d4d",
+					"length": 1,
+					"prevObject": {
+						"0": {},
+						"length": 1,
+						"prevObject": {
+							"0": {
+								"sizzle1476360877178": {
+									"parentNode": [
+										22003,
+										47,
+										true
+									]
+								}
+							},
+							"selector": ".red-ui-editableList-item-content",
+							"context": {},
+							"length": 1
+						},
+						"context": {},
+						"selector": ".red-ui-editableList-item-content .node-input-evts-payload option:selected"
+					},
+					"context": {}
+				},
+				"context": {}
+			}
+		}
+	}]
+}, {
+	"id": "b5de4aaf.e0dc5",
+	"type": "ui_tab",
+	"z": "31cee127.08c1a6",
+	"name": "Simulation",
+	"icon": "dashboard",
+	"order": 1
+}, {
+	"id": "62b2fcae.8fe0a4",
+	"type": "ui_group",
+	"z": "31cee127.08c1a6",
+	"name": "Thermostat Simulation",
+	"tab": "b5de4aaf.e0dc5",
+	"disp": false,
+	"width": "22"
+}, {
+	"id": "69c676d0.fdddb",
+	"type": "ui_group",
+	"z": "c3271096.6f1c08",
+	"name": "Alert Configuration",
+	"tab": "5576a04a.869e08",
+	"order": 2,
+	"disp": true,
+	"width": "8"
+}, {
+	"id": "3f2340dd.4e5f5",
+	"type": "ui_tab",
+	"z": "",
+	"name": "Status ",
+	"icon": "dashboard",
+	"order": 3
+}, {
+	"id": "cdd5cbdc.dee178",
+	"type": "start virtual device",
+	"z": "33084d1a.60af72",
+	"name": "",
+	"deviceId": "",
+	"schema": "b561db29.33fd2",
+	"outputs": 1,
+	"x": 327.5477294921875,
+	"y": 127.7420883178711,
+	"wires": [
+		[
+			"4b48c550.3aed6c"
+		]
+	]
+}, {
+	"id": "4b48c550.3aed6c",
+	"type": "device function",
+	"z": "33084d1a.60af72",
+	"deviceId": "",
+	"schema": "b561db29.33fd2",
+	"name": "Change actual parameters",
+	"func": "if(ActualTemperature > DesiredTemperature ){\n    ActualTemperature -= 0.5;\n}\nelse if(ActualTemperature < DesiredTemperature){\n    ActualTemperature += 0.5;\n}\nreturn msg;",
+	"outputs": 1,
+	"noerr": 0,
+	"x": 599.3334045410156,
+	"y": 128.2063751220703,
+	"wires": [
+		[
+			"c3b5d9d2.789bf8"
+		]
+	]
+}, {
+	"id": "c3b5d9d2.789bf8",
+	"type": "delay",
+	"z": "33084d1a.60af72",
+	"name": "",
+	"pauseType": "delay",
+	"timeout": "3",
+	"timeoutUnits": "seconds",
+	"rate": "1",
+	"rateUnits": "second",
+	"randomFirst": "1",
+	"randomLast": "5",
+	"randomUnits": "seconds",
+	"drop": false,
+	"x": 600.4683685302734,
+	"y": 190.03968048095703,
+	"wires": [
+		[
+			"4b48c550.3aed6c",
+			"1af53a90.7be565"
+		]
+	]
+}, {
+	"id": "1af53a90.7be565",
+	"type": "generate event",
+	"z": "33084d1a.60af72",
+	"deviceId": "",
+	"schema": "b561db29.33fd2",
+	"evt": "f5e261ed3706",
+	"name": "",
+	"x": 838.3415222167969,
+	"y": 189.8055191040039,
+	"wires": [
+		[
+			"e626a4e7.bb0158"
+		]
+	]
+}, {
+	"id": "6777e73f.92cdb8",
+	"type": "function",
+	"z": "31cee127.08c1a6",
+	"name": "update flow context with device changes",
+	"func": "var simulation = flow.get(\"simulation\") || {};\nswitch (msg.topic) {\ncase \"deviceSchema\":\n\tif(Array.isArray(msg.payload)){\n\t\t//all schemas update on startup clean old context \n\t\tsimulation = {};\n\t}\n\telse{//single schema update while running\n\t\tmsg.payload = [msg.payload];\n\n\t}\n\t//update schemas\n\tfor (var i = 0; i < msg.payload.length; i++) {\n\t\tvar schema = msg.payload[i];\n\t\tsimulation[schema.deviceType] = {schema: schema, devices: {}};\n\t}\n\tbreak;\ncase \"deviceCreated\":\n\tvar device = {properties: msg.payload.properties, isOn: true};\n\t//set properties input types\n\tdevice.propertiesInput = {};\n\tfor(var k in device.properties){\n\t\tvar prpType = typeof(device.properties[k]);\n\t\tvar inputType = (prpType === \"number\") ? \"number\": (prpType === \"boolean\") ? \"checkbox\" : \"text\";\n\t\tdevice.propertiesInput[k] = inputType;\n\t}\n\tsimulation[msg.payload.deviceType].devices[msg.payload.deviceId] = device;\n\tbreak;\ncase \"deviceDeleted\":\n\tvar device = msg.payload;\n\tif(simulation[device.deviceType].devices[device.deviceId]){\n\t\tsimulation[device.deviceType].devices[device.deviceId].isOn = false;\n\t}\n\telse\n\t\treturn null; //device already deleted\n\tbreak;\ncase \"propertyChange\":\n\tvar device = msg.payload;\n\tvar changedProperty = device.changedProperty;\n\tsimulation[device.deviceType].devices[device.deviceId].properties[changedProperty.name] = changedProperty.newValue;\n\tbreak;\ndefault:\n\treturn null;\n}\nflow.set(\"simulation\", simulation);\nmsg.payload = simulation;\nreturn msg;\n",
+	"outputs": 1,
+	"noerr": 0,
+	"x": 445.23020935058594,
+	"y": 682.6508598327637,
+	"wires": [
+		[
+			"96d26acb.b67888"
+		]
+	]
+}, {
+	"id": "52f44fe0.b85658",
+	"type": "ui_template",
+	"z": "31cee127.08c1a6",
+	"group": "62b2fcae.8fe0a4",
+	"name": "Simulation Dashbaord",
+	"order": 1,
+	"width": "22",
+	"height": "10",
+	"format": "<link data-require=\"bootstrap-css@3.0.2\" data-semver=\"3.0.3\" rel=\"stylesheet\" href=\"//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css\" />\n<div ng-app=\"simulator\" >\n  <div>\n    <div  ng-repeat=\"(schemaName, data) in msg.payload\" >\n      <h2>Simulation Schemas: {{data.schema.deviceType}}</h2>\n      <md-button background=\"#9ee3f900\" color=\"#fff0\" ng-init=\"instances=1\" ng-click='send({topic: \"createDevice\" , payload: {deviceType: data.schema.deviceType, instances: instances}})'>Create</md-button>\n      <label><input type=\"number\" name=\"input\" ng-model=\"instances\"\n        min=\"1\" max=\"20\" required> instance(s) of {{data.schema.deviceType}}</label>\n        <table class=\"table table-hover\">\n          <thead>\n            <tr>\n              <th>Start/Stop</th>\n              <th>Device Id</th>\n              <th ng-repeat=\"property in data.schema.properties | orderBy : 'name'\">\n                {{ property }}\n              </th>\n              <th>Delete Device</th>\n              <th>View Dashboard</th>\n            </tr>\n            <tbody >\n              <tr ng-repeat=\"(deviceId, device) in data.devices\" ng-model=\"data.devices[deviceId]\" id={{deviceId}}>\n                <td>\n                  <md-switch aria-label=\"stopDevice\" ng-model=\"device.isOn\" ng-change='send({topic: (!device.isOn) ? \"stopDevice\" : \"startDevice\" , payload: {deviceType: data.schema.deviceType, deviceId: deviceId, properties: device.properties}})'></md-switch>\n                </td>\n                <td>{{ deviceId }}</td>\n                <td ng-repeat=\"devPrp in data.schema.properties | orderBy : 'name'\" ng-init='editMode=false; editVal'>{{ device.properties[devPrp] }}\n                  <a href=\"#\" ng-show=\"device.isOn && device.properties[devPrp] !== undefined && editMode==false\" ng-click=\"editMode = true; editVal = device.properties[devPrp]\">\n                    <i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i>\n                  </a>\n                  <input ng-show='editMode && device.isOn && device.propertiesInput[devPrp] === \"text\"' type=\"text\" ng-model=\"editVal\" ng-value=\"editVal\">\n                  <input ng-show='editMode && device.isOn && device.propertiesInput[devPrp] === \"checkbox\"' type=\"checkbox\" ng-model=\"editVal\" ng-value=\"editVal\">\n                  <input ng-show='editMode && device.isOn && device.propertiesInput[devPrp] === \"number\"' type=\"number\" ng-model=\"editVal\" ng-value=\"editVal\">\n                  <a href=\"#\" ng-show=\"editMode && device.isOn\" ng-click=\n                  'payload={deviceType: data.schema.deviceType, deviceId: deviceId};\n                  payload[devPrp] = editVal;\n                  send({topic: \"changeProperty\", payload: payload}); editMode=false'>\n                  <i class=\"fa fa-floppy-o\" aria-hidden=\"true\"></i>\n                </a>\n                <a href=\"#\" ng-show=\"device.isOn && editMode\" ng-click=\"editMode=false\">\n                  <i class=\"fa fa-eraser\" aria-hidden=\"true\"></i>\n                </a>\n              </td>\n              <td>\n                <md-button  ng-click='send({topic: \"deleteDevice\", payload: {deviceType: data.schema.deviceType, deviceId: deviceId}})'>\n                  delete\n                  <ng-md-icon iconType===\"angular-material\" icon=\"delete_forever\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"24\" height=\"24\"> <path d=\"M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.13-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z\"></path></svg></ng-md-icon>\n                </md-button>\n              </td>\n              <td onclick=\"setTimeout(function(){window.location.reload()},100)\">\n                <a href=\"#/2\" ng-click='send({topic: \"viewDevice\", payload: {deviceType: data.schema.deviceType, deviceId: deviceId}})'>\n                  <i class=\"fa fa-bar-chart\" aria-hidden=\"true\"></i>\n                </a>\n              </td>\n            </tr>\n          </tbody>\n        </table>\n      </div>\n    </div>\n  </div>\n",
+	"storeOutMessages": false,
+	"fwdInMessages": false,
+	"x": 246.6507797241211,
+	"y": 130.44444847106934,
+	"wires": [
+		[
+			"cace4d7b.281448"
+		]
+	]
+}, {
+	"id": "cace4d7b.281448",
+	"type": "switch",
+	"z": "31cee127.08c1a6",
+	"name": "Switch cmd",
+	"property": "topic",
+	"propertyType": "msg",
+	"rules": [{
+		"t": "eq",
+		"v": "createDevice",
+		"vt": "str"
+	}, {
+		"t": "eq",
+		"v": "deleteDevice",
+		"vt": "str"
+	}, {
+		"t": "eq",
+		"v": "startDevice",
+		"vt": "str"
+	}, {
+		"t": "eq",
+		"v": "stopDevice",
+		"vt": "str"
+	}, {
+		"t": "eq",
+		"v": "changeProperty",
+		"vt": "str"
+	}, {
+		"t": "eq",
+		"v": "viewDevice",
+		"vt": "str"
+	}],
+	"checkall": "false",
+	"outputs": 6,
+	"x": 461.86507415771484,
+	"y": 130.44443321228027,
+	"wires": [
+		[
+			"f42b940b.f6fcb"
+		],
+		[
+			"da8dcbb9.988b68"
+		],
+		[
+			"cd977e69.25eee8"
+		],
+		[
+			"732abf84.4f55d8"
+		],
+		[
+			"bc51a890.ce47a8"
+		],
+		[
+			"65205ee.26d79a"
+		]
+	]
+}, {
+	"id": "a9211eec.832748",
+	"type": "function",
+	"z": "31cee127.08c1a6",
+	"name": "Generate ID",
+	"func": "var msgs = []\nfor(var i = 0; i < msg.payload.instances; i++){\n    var mac = Math.floor(Math.random() * 16).toString(16) +\n    Math.floor(Math.random() * 16).toString(16) +\n    Math.floor(Math.random() * 16).toString(16) +\n    Math.floor(Math.random() * 16).toString(16) +\n    Math.floor(Math.random() * 16).toString(16) +\n    Math.floor(Math.random() * 16).toString(16) +\n    Math.floor(Math.random() * 16).toString(16) +\n    Math.floor(Math.random() * 16).toString(16) +\n    Math.floor(Math.random() * 16).toString(16) +\n    Math.floor(Math.random() * 16).toString(16) +\n    Math.floor(Math.random() * 16).toString(16) +\n    Math.floor(Math.random() * 16).toString(16);\n    var macStr = mac[0].toUpperCase() + mac[1].toUpperCase() + mac[2].toUpperCase() + mac[3].toUpperCase() +\n    mac[4].toUpperCase() + mac[5].toUpperCase() + mac[6].toUpperCase() + mac[7].toUpperCase() +\n    mac[8].toUpperCase() + mac[9].toUpperCase() + mac[10].toUpperCase() + mac[11].toUpperCase();\n    msgs.push({deviceId: macStr, typeId: msg.payload.deviceType});\n}\nmsg.payload =msgs\nreturn msg;",
+	"outputs": 1,
+	"noerr": 0,
+	"x": 363.0713195800781,
+	"y": 341.0000305175781,
+	"wires": [
+		[
+			"6eb06960.36e248"
+		]
+	]
+}, {
+	"id": "9f6d4d.1c1412b",
+	"type": "function",
+	"z": "31cee127.08c1a6",
+	"name": "Add Device to flow context",
+	"func": "if(msg.payload === null) return null;\n\nvar simulation = flow.get(\"simulation\") || {};\nvar newDevices = [];\nvar turnOnMsgs = [];\nfor(var i = 0; i < msg.payload.length; i++){\n    var resp = msg.payload[i];\n    if(!resp.deviceId){\n        node.error(\"error on register device\");\n    }\n    else{\n         var deviceId = resp.deviceId;\n         var deviceType = resp.typeId;\n         if(simulation[deviceType]){\n            simulation[deviceType].devices[deviceId] = {properties: {}, isOn: false};\n            newDevices.push({typeId: deviceType, deviceId: deviceId});\n            turnOnMsgs.push({payload: {deviceType: deviceType, deviceId: deviceId}});\n         }\n    }\n}\n\nflow.set(\"simulation\", simulation);\n//check if need to push changes to db\nmsg.payload = simulation; //message to the ui\nif(msg.updatedb !== false && newDevices.length > 0){\n    var pendingUpdates = flow.get(\"dbUpdates\") || {addDevices: [],deleteDevices: []};\n\tpendingUpdates.addDevices = pendingUpdates.addDevices.concat(newDevices);\n\tflow.set(\"dbUpdates\", pendingUpdates);\n}\nreturn [msg, turnOnMsgs];\n",
+	"outputs": "2",
+	"noerr": 0,
+	"x": 786.1665802001953,
+	"y": 340.5238723754883,
+	"wires": [
+		[
+			"257dcc27.aedb5c"
+		],
+		[
+			"6295b649.ea757"
+		]
+	]
+}, {
+	"id": "2f082eec.c6aaea",
+	"type": "function",
+	"z": "31cee127.08c1a6",
+	"name": "Delete Device from flow context",
+	"func": "var simulation = flow.get(\"simulation\") || {};\nvar deviceId = msg.payload.deviceId;\nvar deviceType = msg.payload.deviceType;\ndelete simulation[deviceType].devices[deviceId];\nflow.set(\"simulation\", simulation);\nvar uiMsg = {payload: simulation};\nvar closeDeviceMsg = {payload: {deviceType: deviceType, deviceId: deviceId}};\n\nif(msg.updatedb !== false){\n    var pendingUpdates = flow.get(\"dbUpdates\") || {addDevices: [],deleteDevices: []};\n\tpendingUpdates.deleteDevices.push({typeId: deviceType, deviceId: deviceId});\n\tflow.set(\"dbUpdates\", pendingUpdates);\n}\n\nreturn [closeDeviceMsg,uiMsg];",
+	"outputs": "2",
+	"noerr": 0,
+	"x": 335.6348571777344,
+	"y": 513.1904678344727,
+	"wires": [
+		[
+			"38f9969f.504dda",
+			"5e1fa057.2bb7a8"
+		],
+		[
+			"795df543.f17054"
+		]
+	]
+}, {
+	"id": "ec82db05.2480f",
+	"type": "link in",
+	"z": "31cee127.08c1a6",
+	"name": "Simulation Dashboard Input",
+	"links": [
+		"257dcc27.aedb5c",
+		"795df543.f17054",
+		"96d26acb.b67888"
+	],
+	"x": 86.36507415771484,
+	"y": 130.73016929626465,
+	"wires": [
+		[
+			"52f44fe0.b85658"
+		]
+	]
+}, {
+	"id": "257dcc27.aedb5c",
+	"type": "link out",
+	"z": "31cee127.08c1a6",
+	"name": "Simulation Dashboard Outlink",
+	"links": [
+		"ec82db05.2480f"
+	],
+	"x": 972.9606075286865,
+	"y": 335.38102531433105,
+	"wires": []
+}, {
+	"id": "bc51a890.ce47a8",
+	"type": "set properties",
+	"z": "31cee127.08c1a6",
+	"deviceId": "",
+	"schema": "b561db29.33fd2",
+	"name": "",
+	"propAll": true,
+	"valueType": "msg",
+	"value": "",
+	"x": 760.6428298950195,
+	"y": 192.1587529182434,
+	"wires": [
+		[]
+	]
+}, {
+	"id": "a49fdbb.8bb4528",
+	"type": "device listener",
+	"z": "31cee127.08c1a6",
+	"monitor": "stop",
+	"monitorAll": true,
+	"deviceId": "",
+	"allDeviceIds": true,
+	"allSchemas": true,
+	"allProps": true,
+	"schema": "b561db29.33fd2",
+	"props": [],
+	"name": "",
+	"x": 149.515869140625,
+	"y": 682.0476512908936,
+	"wires": [
+		[
+			"6777e73f.92cdb8"
+		]
+	]
+}, {
+	"id": "f42b940b.f6fcb",
+	"type": "link out",
+	"z": "31cee127.08c1a6",
+	"name": "Register Device -  out",
+	"links": [
+		"b816503c.dc5ac8"
+	],
+	"x": 673.9126586914062,
+	"y": 39.53968811035156,
+	"wires": []
+}, {
+	"id": "c779a2a6.d75f1",
+	"type": "comment",
+	"z": "31cee127.08c1a6",
+	"name": "Register Device",
+	"info": "",
+	"x": 772.5793304443359,
+	"y": 40.65079307556152,
+	"wires": []
+}, {
+	"id": "da8dcbb9.988b68",
+	"type": "link out",
+	"z": "31cee127.08c1a6",
+	"name": "Unregister Device out",
+	"links": [
+		"d97cee1e.5f4c2"
+	],
+	"x": 674.4604034423828,
+	"y": 77.82540893554688,
+	"wires": []
+}, {
+	"id": "665e0fd.ad584f",
+	"type": "comment",
+	"z": "31cee127.08c1a6",
+	"name": "Unregister Device",
+	"info": "",
+	"x": 782.2539443969727,
+	"y": 78.19050407409668,
+	"wires": []
+}, {
+	"id": "3eadc32c.3a4fec",
+	"type": "comment",
+	"z": "31cee127.08c1a6",
+	"name": "Register Device",
+	"info": "",
+	"x": 129.30152893066406,
+	"y": 241.74606704711914,
+	"wires": []
+}, {
+	"id": "b816503c.dc5ac8",
+	"type": "link in",
+	"z": "31cee127.08c1a6",
+	"name": "Registing device - in",
+	"links": [
+		"f42b940b.f6fcb"
+	],
+	"x": 94.53964233398438,
+	"y": 287.1905241012573,
+	"wires": [
+		[
+			"ae6c383e.1b7888",
+			"dcc60c2a.662a08"
+		]
+	]
+}, {
+	"id": "71cbed5a.88d73c",
+	"type": "comment",
+	"z": "31cee127.08c1a6",
+	"name": "Unregister Device",
+	"info": "",
+	"x": 130.2698211669922,
+	"y": 464.55555152893066,
+	"wires": []
+}, {
+	"id": "d97cee1e.5f4c2",
+	"type": "link in",
+	"z": "31cee127.08c1a6",
+	"name": "Unregister Device - in",
+	"links": [
+		"da8dcbb9.988b68"
+	],
+	"x": 87.01584434509277,
+	"y": 512.0952777862549,
+	"wires": [
+		[
+			"2f082eec.c6aaea",
+			"ef6ee4ed.29b3a8"
+		]
+	]
+}, {
+	"id": "5b84e9e5.e7d49",
+	"type": "comment",
+	"z": "31cee127.08c1a6",
+	"name": "Dashboard Input",
+	"info": "",
+	"x": 1072.0953559875488,
+	"y": 336.0951290130615,
+	"wires": []
+}, {
+	"id": "8d0b2105.070fd8",
+	"type": "function",
+	"z": "31cee127.08c1a6",
+	"name": "start DB update",
+	"func": "var pendingUpdates = flow.get(\"dbUpdates\");\nif(!pendingUpdates || (pendingUpdates.addDevices.length === 0 && pendingUpdates.deleteDevices.length === 0)  ) \nreturn [msg,null];\n//load changes on msg\nmsg.addDevices = pendingUpdates.addDevices;\nmsg.deleteDevices = pendingUpdates.deleteDevices;\n//set doc id\nmsg.payload =  {_id: \"registeredDevices\"}\n\n//rest flow pending changes\npendingUpdates.addDevices = [];\npendingUpdates.deleteDevices = [];\nflow.set(\"dbUpdates\",pendingUpdates);\nreturn [msg,msg];",
+	"outputs": "2",
+	"noerr": 0,
+	"x": 342.1429443359375,
+	"y": 935.8572387695312,
+	"wires": [
+		[
+			"4f2c5ffa.d550e8"
+		],
+		[
+			"6436c199.69e4b"
+		]
+	]
+}, {
+	"id": "6436c199.69e4b",
+	"type": "cloudant in",
+	"z": "31cee127.08c1a6",
+	"name": "Get reg devices from db",
+	"cloudant": "",
+	"database": "redsimulation-db",
+	"service": "iottool-cloudantNoSQLDB",
+	"search": "_id_",
+	"design": "",
+	"index": "",
+	"x": 578.3651733398438,
+	"y": 941.8572378158569,
+	"wires": [
+		[
+			"3fb556d3.2bbdaa"
+		]
+	]
+}, {
+	"id": "54cfa78d.44213",
+	"type": "cloudant out",
+	"z": "31cee127.08c1a6",
+	"name": "Update reg devices in db",
+	"cloudant": "",
+	"database": "redsimulation-db",
+	"service": "iottool-cloudantNoSQLDB",
+	"payonly": true,
+	"operation": "insert",
+	"x": 1053.3651733398438,
+	"y": 941.8572378158569,
+	"wires": []
+}, {
+	"id": "dc1372cd.d0761",
+	"type": "comment",
+	"z": "31cee127.08c1a6",
+	"name": "On Device Change",
+	"info": "",
+	"x": 128.60321044921875,
+	"y": 627.507926940918,
+	"wires": []
+}, {
+	"id": "bfd2b94f.b16ae",
+	"type": "inject",
+	"z": "31cee127.08c1a6",
+	"name": "Start db sync",
+	"topic": "",
+	"payload": "{\"_id\": \"registeredDevices\"}",
+	"payloadType": "json",
+	"repeat": "",
+	"crontab": "",
+	"once": true,
+	"x": 151.1429443359375,
+	"y": 804.8572387695312,
+	"wires": [
+		[
+			"4f2c5ffa.d550e8",
+			"f3b7204c.afc998"
+		]
+	]
+}, {
+	"id": "fb5c2dae.9f391",
+	"type": "cloudant in",
+	"z": "31cee127.08c1a6",
+	"name": "Get reg devices from db",
+	"cloudant": "",
+	"database": "redsimulation-db",
+	"service": "iottool-cloudantNoSQLDB",
+	"search": "_id_",
+	"design": "",
+	"index": "",
+	"x": 537.1429443359375,
+	"y": 804.8572387695312,
+	"wires": [
+		[
+			"a5c30917.e59a3"
+		]
+	]
+}, {
+	"id": "a5c30917.e59a3",
+	"type": "change",
+	"z": "31cee127.08c1a6",
+	"name": "",
+	"rules": [{
+		"t": "move",
+		"p": "payload.devices",
+		"pt": "msg",
+		"to": "payload",
+		"tot": "msg"
+	}, {
+		"t": "set",
+		"p": "updatedb",
+		"pt": "msg",
+		"to": "false",
+		"tot": "bool"
+	}],
+	"action": "",
+	"property": "",
+	"from": "",
+	"to": "",
+	"reg": false,
+	"x": 757.6429443359375,
+	"y": 804.8572387695312,
+	"wires": [
+		[
+			"b8ab5732.b593e"
+		]
+	]
+}, {
+	"id": "4f2c5ffa.d550e8",
+	"type": "delay",
+	"z": "31cee127.08c1a6",
+	"name": "",
+	"pauseType": "delay",
+	"timeout": "10",
+	"timeoutUnits": "seconds",
+	"rate": "1",
+	"rateUnits": "second",
+	"randomFirst": "1",
+	"randomLast": "5",
+	"randomUnits": "seconds",
+	"drop": false,
+	"x": 337.6429443359375,
+	"y": 861.8572387695312,
+	"wires": [
+		[
+			"8d0b2105.070fd8"
+		]
+	]
+}, {
+	"id": "3fb556d3.2bbdaa",
+	"type": "function",
+	"z": "31cee127.08c1a6",
+	"name": "write devices to db",
+	"func": "var doc = msg.payload || {_id: \"registeredDevices\", devices: []};\nif(msg.addDevices){\n\tdoc.devices = doc.devices.concat(msg.addDevices);\n}\n\nfunction findIndex(array, func){\n    for(var i = 0; i < array.length; i++){\n        var item = array[i];\n        if(func(item) === true){\n            return i;\n        }\n    }\n    return -1;\n}\nif(msg.deleteDevices){  \n\tfor (var i = 0; i < msg.deleteDevices.length; i++) {\n\t\tvar deviceType = msg.deleteDevices[i].deviceType;\n\t\tvar deviceId = msg.deleteDevices[i].deviceId;\n\t\tvar index = findIndex(doc.devices,function(item){return item.deviceId === deviceId;});\n\t\tif(index !== -1){\n\t\t    doc.devices.splice(index, 1);\n\t\t}\n\t}\n}\nmsg.payload = doc;\nreturn msg;",
+	"outputs": 1,
+	"noerr": 0,
+	"x": 814.8651733398438,
+	"y": 941.8572378158569,
+	"wires": [
+		[
+			"54cfa78d.44213"
+		]
+	]
+}, {
+	"id": "f3b7204c.afc998",
+	"type": "delay",
+	"z": "31cee127.08c1a6",
+	"name": "",
+	"pauseType": "delay",
+	"timeout": "3",
+	"timeoutUnits": "seconds",
+	"rate": "1",
+	"rateUnits": "second",
+	"randomFirst": "1",
+	"randomLast": "5",
+	"randomUnits": "seconds",
+	"drop": false,
+	"x": 334.1429443359375,
+	"y": 804.8572387695312,
+	"wires": [
+		[
+			"fb5c2dae.9f391"
+		]
+	]
+}, {
+	"id": "b5f5604.cb7f2a",
+	"type": "comment",
+	"z": "31cee127.08c1a6",
+	"name": "README",
+	"info": "This flow implements an out of the box, generic\ndevice simulator, that can create, monitor \nand control virtual/simulated devices, whose behaviors\nare described as Node-RED flows using the Virtual_IoT_Device\nnode types.\n\n__There is no need to modify this flow in order to create and \nemulate virtual devices__\n\n## Connecting the simulator to device behavior flows\nTo connect a virtual device to the simulation dashboard, you need to connect the *__StartDevice__* and  *__StopDevice__* output links in the simulator flow to \nthe *__start virtual device__* and *__stop virtual device__* nodes in the device behavior flow (respectively)\n\n## Using the dashboard UI\nThe dashboard UI is part of the Node-RED application dashboard \nwhich is in _[application URL]/ui_.\nAfter opening the dashboard, select the _Simulation_ \npage (top left menu/side bar) to view the virtual devices dashboard.\nYou can create/delete multiple instances for every \ndevice type as well as view/change their property values.\nThe devices are auto generated in the IoT Platform using IDs \ngenerated by the dashboard. \n\n### Note:\nThe flow relies on the the CloudantNoSQL DB Service (deployed by default) to persist device instances between simulation sessions.\n\n\n\n",
+	"x": 104.72219848632812,
+	"y": 88.95240211486816,
+	"wires": []
+}, {
+	"id": "fe3c4d07.74845",
+	"type": "comment",
+	"z": "31cee127.08c1a6",
+	"name": "Save registered devices to DB",
+	"info": "",
+	"x": 164.21441650390625,
+	"y": 764.8572387695312,
+	"wires": []
+}, {
+	"id": "ef6ee4ed.29b3a8",
+	"type": "device-manager",
+	"z": "31cee127.08c1a6",
+	"auth": "bluemix",
+	"name": "Delete Device",
+	"apiKey": "",
+	"deviceType": "",
+	"method": "Delete",
+	"deviceId": "",
+	"password": "",
+	"x": 282.7302474975586,
+	"y": 559.1110286712646,
+	"wires": [
+		[]
+	]
+}, {
+	"id": "6eb06960.36e248",
+	"type": "device-manager",
+	"z": "31cee127.08c1a6",
+	"auth": "bluemix",
+	"name": "Register Device",
+	"apiKey": "",
+	"deviceType": "",
+	"method": "Create",
+	"deviceId": "",
+	"password": "",
+	"x": 540.642822265625,
+	"y": 341.7143249511719,
+	"wires": [
+		[
+			"9f6d4d.1c1412b"
+		]
+	]
+}, {
+	"id": "181b443c.1dbc8c",
+	"type": "link in",
+	"z": "33084d1a.60af72",
+	"name": "Start Thermostat",
+	"links": [
+		"20326562.0d2932"
+	],
+	"x": 179.28570556640625,
+	"y": 127.85714721679688,
+	"wires": [
+		[
+			"cdd5cbdc.dee178"
+		]
+	]
+}, {
+	"id": "f25a9f25.73c74",
+	"type": "stop virtual device",
+	"z": "33084d1a.60af72",
+	"name": "",
+	"deviceId": "",
+	"x": 325.635009765625,
+	"y": 276.8174800872803,
+	"wires": [
+		[]
+	]
+}, {
+	"id": "3215dd1a.0690d2",
+	"type": "link in",
+	"z": "33084d1a.60af72",
+	"name": "Stop Thermostat",
+	"links": [
+		"3fa88287.990a36"
+	],
+	"x": 175.793701171875,
+	"y": 276.746000289917,
+	"wires": [
+		[
+			"f25a9f25.73c74"
+		]
+	]
+}, {
+	"id": "e626a4e7.bb0158",
+	"type": "ibmiot out",
+	"z": "33084d1a.60af72",
+	"authentication": "boundService",
+	"apiKey": "",
+	"outputType": "evt",
+	"deviceId": "thermostat1",
+	"deviceType": "Thermostat",
+	"eventCommandType": "thermostatEvent",
+	"format": "json",
+	"data": "some",
+	"qos": 0,
+	"name": "IBM IoT",
+	"service": "registered",
+	"x": 1057.0478210449219,
+	"y": 189.27777099609375,
+	"wires": []
+}, {
+	"id": "7940b957.f2caa",
+	"type": "device-type-manager",
+	"z": "31cee127.08c1a6",
+	"auth": "bluemix",
+	"name": "",
+	"apiKey": "",
+	"deviceType": "",
+	"classId": "Gateway",
+	"method": "Create",
+	"deviceTypeId": "",
+	"serialNumber": "",
+	"manufacturer": "",
+	"model": "",
+	"deviceClass": "",
+	"infoDescription": "",
+	"firmwareVersion": "",
+	"hardwareVersion": "",
+	"descriptiveLocation": "",
+	"metadata": "{\"parts\":2222}",
+	"password": "",
+	"properties": [{
+		"key": "metadata",
+		"value": "{\"key\":1}"
+	}],
+	"x": 477.9999084472656,
+	"y": 288.21429443359375,
+	"wires": [
+		[]
+	]
+}, {
+	"id": "dcc60c2a.662a08",
+	"type": "function",
+	"z": "31cee127.08c1a6",
+	"name": "Update Payload",
+	"func": "msg.payload.deviceTypeId = msg.payload.deviceType\nreturn msg;",
+	"outputs": 1,
+	"noerr": 0,
+	"x": 235.87302780151367,
+	"y": 287.93653297424316,
+	"wires": [
+		[
+			"7940b957.f2caa"
+		]
+	]
+}, {
+	"id": "ae6c383e.1b7888",
+	"type": "delay",
+	"z": "31cee127.08c1a6",
+	"name": "",
+	"pauseType": "delay",
+	"timeout": "5",
+	"timeoutUnits": "seconds",
+	"rate": "1",
+	"rateUnits": "second",
+	"randomFirst": "1",
+	"randomLast": "5",
+	"randomUnits": "seconds",
+	"drop": false,
+	"x": 208.49206924438477,
+	"y": 340.47620391845703,
+	"wires": [
+		[
+			"a9211eec.832748"
+		]
+	]
+}, {
+	"id": "f762ccb6.2c5848",
+	"type": "device-type-manager",
+	"z": "31cee127.08c1a6",
+	"auth": "bluemix",
+	"name": "",
+	"apiKey": "",
+	"deviceType": "",
+	"classId": "Gateway",
+	"method": "Delete",
+	"deviceTypeId": "",
+	"serialNumber": "",
+	"manufacturer": "",
+	"model": "",
+	"deviceClass": "",
+	"infoDescription": "",
+	"firmwareVersion": "",
+	"hardwareVersion": "",
+	"descriptiveLocation": "",
+	"metadata": "{\"parts\":2222}",
+	"password": "",
+	"properties": [],
+	"x": 964.2380752563477,
+	"y": 506.1983470916748,
+	"wires": [
+		[]
+	]
+}, {
+	"id": "a6c6039a.2f2a88",
+	"type": "function",
+	"z": "31cee127.08c1a6",
+	"name": "Update Payload",
+	"func": "msg.payload.deviceTypeId = msg.payload.deviceType\nreturn msg;",
+	"outputs": 1,
+	"noerr": 0,
+	"x": 750.285587310791,
+	"y": 506.58725929260254,
+	"wires": [
+		[
+			"f762ccb6.2c5848"
+		]
+	]
+}, {
+	"id": "38f9969f.504dda",
+	"type": "delay",
+	"z": "31cee127.08c1a6",
+	"name": "",
+	"pauseType": "delay",
+	"timeout": "5",
+	"timeoutUnits": "seconds",
+	"rate": "1",
+	"rateUnits": "second",
+	"randomFirst": "1",
+	"randomLast": "5",
+	"randomUnits": "seconds",
+	"drop": false,
+	"x": 566.1111297607422,
+	"y": 506.8095226287842,
+	"wires": [
+		[
+			"a6c6039a.2f2a88"
+		]
+	]
+}, {
+	"id": "e8949a51.e3819",
+	"type": "ibmiot in",
+	"z": "c3271096.6f1c08",
+	"authentication": "boundService",
+	"apiKey": "",
+	"inputType": "cmd",
+	"deviceId": "thermostat1",
+	"applicationId": "",
+	"deviceType": "Thermostat",
+	"eventType": "+",
+	"commandType": "configuration",
+	"format": "json",
+	"name": "IBM IoT",
+	"service": "registered",
+	"allDevices": true,
+	"allApplications": "",
+	"allDeviceTypes": true,
+	"allEvents": true,
+	"allCommands": true,
+	"allFormats": "",
+	"qos": "0",
+	"x": 130,
+	"y": 122.4285659790039,
+	"wires": [
+		[
+			"5d764316.fd134c"
+		]
+	]
+}, {
+	"id": "5d764316.fd134c",
+	"type": "function",
+	"z": "c3271096.6f1c08",
+	"name": "Change Configuration",
+	"func": "if(msg.payload.eventType=='emailChange')\ncontext.global.email=msg.payload.data;\n\n\nelse if(msg.payload.eventType=='CutOutTempChange')\ncontext.global.CutOutTemperature=msg.payload.data;\n\nelse if(msg.payload.eventType=='CutInTempChange')\ncontext.global.CutInTemperature=msg.payload.data;\n\nelse if(msg.payload.eventType=='alertFrequencyChange')\ncontext.global.alertFrequencyChange=msg.payload.data;\n\n\nreturn msg;",
+	"outputs": 1,
+	"noerr": 0,
+	"x": 347.5555725097656,
+	"y": 122.6362533569336,
+	"wires": [
+		[]
+	]
+}, {
+	"id": "ce4cdbc0.6c3408",
+	"type": "ibmiot out",
+	"z": "c3271096.6f1c08",
+	"authentication": "boundService",
+	"apiKey": "",
+	"outputType": "cmd",
+	"deviceId": "thermostat1",
+	"deviceType": "Thermostat",
+	"eventCommandType": "configuration",
+	"format": "json",
+	"data": "{\"d\":{\"eventType\":\"CutInTempChange\",\"data\":\"21\"}}",
+	"qos": "",
+	"name": "IBM IoT",
+	"service": "registered",
+	"x": 1018.6093139648438,
+	"y": 462.6602478027344,
+	"wires": []
+}, {
+	"id": "7c5658b2.4b9158",
+	"type": "comment",
+	"z": "c3271096.6f1c08",
+	"name": "Accept configuration change from platform",
+	"info": "Accept following configuration change from platform\n\n1.Email ID for email notification.\n2.CutOutTemperature .\n3.CutInTemperature .\n4.AlertFrequency .\n\n",
+	"x": 211,
+	"y": 74.4285659790039,
+	"wires": []
+}, {
+	"id": "dc37c6cc.04b838",
+	"type": "comment",
+	"z": "c3271096.6f1c08",
+	"name": "Send  configuration change to  platform",
+	"info": "",
+	"x": 199,
+	"y": 199.4285659790039,
+	"wires": []
+}, {
+	"id": "9b297a5.c044c88",
+	"type": "switch",
+	"z": "90969cec.056bc",
+	"name": "AlarmConditionCheck",
+	"property": "payload.data",
+	"propertyType": "msg",
+	"rules": [{
+		"t": "gt",
+		"v": "CutOutTemperature",
+		"vt": "global"
+	}, {
+		"t": "lt",
+		"v": "CutInTemperature",
+		"vt": "global"
+	}],
+	"checkall": "true",
+	"outputs": 2,
+	"x": 547,
+	"y": 110,
+	"wires": [
+		[],
+		[]
+	]
+}, {
+	"id": "9046cf9d.d6a83",
+	"type": "function",
+	"z": "90969cec.056bc",
+	"name": "SetDefaultNormalTemperatures",
+	"func": "if(!context.global.hasOwnProperty(\"CutOutTemperature\"))\n    context.global.CutOutTemperature=20;\nif(!context.global.hasOwnProperty(\"CutInTemperature\"))\n    context.global.CutInTemperature=10;\nreturn msg;",
+	"outputs": 1,
+	"noerr": 0,
+	"x": 253,
+	"y": 109,
+	"wires": [
+		[
+			"9b297a5.c044c88",
+			"56b00584.5a325c"
+		]
+	]
+}, {
+	"id": "56b00584.5a325c",
+	"type": "switch",
+	"z": "90969cec.056bc",
+	"name": "GreaterThanCutInTemperature",
+	"property": "payload.data",
+	"propertyType": "msg",
+	"rules": [{
+		"t": "gt",
+		"v": "CutInTemperature",
+		"vt": "global"
+	}],
+	"checkall": "true",
+	"outputs": 1,
+	"x": 576,
+	"y": 195,
+	"wires": [
+		[
+			"99a63c4e.17e72"
+		]
+	]
+}, {
+	"id": "99a63c4e.17e72",
+	"type": "switch",
+	"z": "90969cec.056bc",
+	"name": "LessThanCutOutTemperature",
+	"property": "payload.data",
+	"propertyType": "msg",
+	"rules": [{
+		"t": "lt",
+		"v": "CutOutTemperature",
+		"vt": "global"
+	}],
+	"checkall": "true",
+	"outputs": 1,
+	"x": 863,
+	"y": 195,
+	"wires": [
+		[]
+	]
+}, {
+	"id": "2976a33.c57b15c",
+	"type": "comment",
+	"z": "90969cec.056bc",
+	"name": "Alert Condition Check",
+	"info": "",
+	"x": 544,
+	"y": 158,
+	"wires": []
+}, {
+	"id": "40170ae5.93a60c",
+	"type": "comment",
+	"z": "90969cec.056bc",
+	"name": "Alarm Condition Check",
+	"info": "Alarms and Alerts are raised as per the value\nof the current temperature .They are influenced \nby fllowing parameters.\n1.CutIn Temperature.\n2.CutOut temperature.\n\nIf temperature is lower than CutIn temperature \nand higher than CutOut temperature Alarms\nwill be raised .\n\nIf temperature is between CutIn and CutOut \ntemperature Alerts will be raised",
+	"x": 119,
+	"y": 51,
+	"wires": []
+}, {
+	"id": "1ef1baa5.1d3685",
+	"type": "function",
+	"z": "175817de.c3752",
+	"name": "CofiugureEmailID",
+	"func": "if(context.global.hasOwnProperty(\"email\"))\n    msg.to=context.global.email;\nelse{\n    //This is a dummy email id\n    context.global.email=\"monitoringserviceengineer@yourorg.com\";\n    msg.to=context.global.email;\n}\n\n\n\nreturn msg;",
+	"outputs": 1,
+	"noerr": 0,
+	"x": 225.44444274902344,
+	"y": 98.11110305786133,
+	"wires": [
+		[
+			"1a9ad890.d76adf"
+		]
+	]
+}, {
+	"id": "692769ad.52fd",
+	"type": "e-mail",
+	"z": "175817de.c3752",
+	"server": "smtp.gmail.com",
+	"port": "465",
+	"name": "",
+	"dname": "ServiceEngineerAlert",
+	"x": 933.3333206176758,
+	"y": 92.11112213134766,
+	"wires": []
+}, {
+	"id": "9de9fa83.64a968",
+	"type": "switch",
+	"z": "175817de.c3752",
+	"name": "AlertNecessityCheck",
+	"property": "data",
+	"propertyType": "msg",
+	"rules": [{
+		"t": "eq",
+		"v": "1",
+		"vt": "str"
+	}, {
+		"t": "eq",
+		"v": "0",
+		"vt": "str"
+	}],
+	"checkall": "true",
+	"outputs": 2,
+	"x": 695,
+	"y": 98.22221946716309,
+	"wires": [
+		[
+			"692769ad.52fd"
+		],
+		[]
+	]
+}, {
+	"id": "1a9ad890.d76adf",
+	"type": "function",
+	"z": "175817de.c3752",
+	"name": "AlertFrequencyCheck",
+	"func": "\n\nif(context.global.hasOwnProperty(\"LastMessageTime\")){\n    var now = ( new Date() ).getTime();\n    var lastMessageTime=context.global.LastMessageTime;\n    var alertFrequencyChange=context.global.alertFrequencyChange;\n    if ((now-lastMessageTime)/1000 >alertFrequencyChange)\n    context.global.NeedFlow=1;\n    else\n     context.global.NeedFlow=0;\n context.global.LastMessageTime=now;\n}else\n{\n    context.global.NeedFlow=1;\n    var now = ( new Date() ).getTime();\n    context.global.LastMessageTime=now;\n}\nmsg.data=context.global.NeedFlow;\n\nreturn msg;",
+	"outputs": 1,
+	"noerr": 0,
+	"x": 460.27779388427734,
+	"y": 97.91669845581055,
+	"wires": [
+		[
+			"9de9fa83.64a968"
+		]
+	]
+}, {
+	"id": "bcee61ca.2e432",
+	"type": "comment",
+	"z": "175817de.c3752",
+	"name": "Service Engineer Notification",
+	"info": "Sends Email as notification in case of Alram situation.",
+	"x": 140,
+	"y": 43,
+	"wires": []
+}, {
+	"id": "d75598ed.02c958",
+	"type": "ibmiot in",
+	"z": "cf2f140b.3f783",
+	"authentication": "boundService",
+	"apiKey": "",
+	"inputType": "evt",
+	"deviceId": "thermostat1",
+	"applicationId": "",
+	"deviceType": "+",
+	"eventType": "tempevt",
+	"commandType": "",
+	"format": "json",
+	"name": "IBM IoT",
+	"service": "registered",
+	"allDevices": true,
+	"allApplications": "",
+	"allDeviceTypes": true,
+	"allEvents": true,
+	"allCommands": "",
+	"allFormats": true,
+	"qos": "0",
+	"x": 66.95462036132812,
+	"y": 130.28219604492188,
+	"wires": [
+		[
+			"76eeb964.602d9"
+		]
+	]
+}, {
+	"id": "9f6317ef.d18958",
+	"type": "function",
+	"z": "cf2f140b.3f783",
+	"name": "Alarm",
+	"func": "var now = ( new Date() ).getTime();\nvar value=msg.payload.data;\nmsg.payload = {\n    tstamp: now,\n    Temperature: value, \n    incident: \"Alarm\"\n};\n\nreturn msg;\n",
+	"outputs": 1,
+	"noerr": 0,
+	"x": 743.95458984375,
+	"y": 118.14288330078125,
+	"wires": [
+		[
+			"4f055051.4bb9",
+			"52e5398e.c62108",
+			"ee26b0a0.c996f"
+		]
+	]
+}, {
+	"id": "4f055051.4bb9",
+	"type": "cloudant out",
+	"z": "cf2f140b.3f783",
+	"name": "database",
+	"cloudant": "181edd10.83d50b",
+	"database": "refrigeratordb",
+	"service": "iottool-cloudantNoSQLDB",
+	"payonly": true,
+	"operation": "insert",
+	"x": 925.5081787109375,
+	"y": 162.80740356445312,
+	"wires": []
+}, {
+	"id": "9769232c.0c0a78",
+	"type": "function",
+	"z": "cf2f140b.3f783",
+	"name": "Alert",
+	"func": "var now = ( new Date() ).getTime();\nvar value=msg.payload.data;\nmsg.payload = {\n    tstamp: now,\n    Temperature: value, \n    incident: \"Alert\",\n    Cause :\"Temperature above CutIn value\"\n};\n\nreturn msg;\n",
+	"outputs": 1,
+	"noerr": 0,
+	"x": 745.95458984375,
+	"y": 193.14288330078125,
+	"wires": [
+		[
+			"4f055051.4bb9",
+			"f6eceeaf.74fc7"
+		]
+	]
+}, {
+	"id": "ee26b0a0.c996f",
+	"type": "subflow:175817de.c3752",
+	"z": "cf2f140b.3f783",
+	"name": "Alert Service Engineer",
+	"x": 961.95458984375,
+	"y": 116.28219604492188,
+	"wires": []
+}, {
+	"id": "e2f2cda8.9f80b",
+	"type": "subflow:90969cec.056bc",
+	"z": "cf2f140b.3f783",
+	"name": "Alarm / Alert Check",
+	"x": 557.3831176757812,
+	"y": 125,
+	"wires": [
+		[
+			"9f6317ef.d18958"
+		],
+		[
+			"9769232c.0c0a78"
+		]
+	]
+}, {
+	"id": "a35f2f0a.2c608",
+	"type": "comment",
+	"z": "cf2f140b.3f783",
+	"name": "Alarms and Alerts",
+	"info": "Alarms and Alerts are raised as per the value\nof the current temperature .They are influenced \nby fllowing parameters.                         \n1.CutIn Temperature.                            \n2.CutOut temperature.\n\nIf temperature is lower than CutIn temperature \nand higher than CutOut temperature Alarms\nwill be raised .\n\nIf temperature is between CutIn and CutOut \ntemperature Alerts will be raised",
+	"x": 104.95465087890625,
+	"y": 78.28219604492188,
+	"wires": []
+}, {
+	"id": "73177468.b809ac",
+	"type": "function",
+	"z": "cf2f140b.3f783",
+	"name": "Temperature",
+	"func": "var temp= msg.payload.data;\nmsg.payload = temp;\nreturn msg;",
+	"outputs": 1,
+	"noerr": 0,
+	"x": 547.4990615844727,
+	"y": 288.6499538421631,
+	"wires": [
+		[
+			"bdf66d2a.4094b8",
+			"bd898ae5.bfcfb8"
+		]
+	]
+}, {
+	"id": "52e5398e.c62108",
+	"type": "function",
+	"z": "cf2f140b.3f783",
+	"name": "Temperature Alarm",
+	"func": "var temp=msg.payload.Temperature;\nmsg.payload=\"Check Thermostat. Current temperature is :\"+temp;\nmsg.topic=\"Alarm\";\nreturn msg;\n",
+	"outputs": 1,
+	"noerr": 0,
+	"x": 953.837890625,
+	"y": 66.88333129882812,
+	"wires": [
+		[
+			"135ed862.c1316"
+		]
+	]
+}, {
+	"id": "135ed862.c1316",
+	"type": "ui_toast",
+	"z": "cf2f140b.3f783",
+	"position": "top right",
+	"displayTime": "",
+	"name": "show toast",
+	"x": 1166.337890625,
+	"y": 67.25003051757812,
+	"wires": []
+}, {
+	"id": "f6eceeaf.74fc7",
+	"type": "function",
+	"z": "cf2f140b.3f783",
+	"name": "Temperature Alert",
+	"func": "var temp=msg.payload.Temperature;\nmsg.payload=\"Check Thermostat. Current temperature is :\"+temp;\nmsg.topic=\"Alert\";\nreturn msg;\n",
+	"outputs": 1,
+	"noerr": 0,
+	"x": 954.95458984375,
+	"y": 217,
+	"wires": [
+		[]
+	]
+}, {
+	"id": "bdf66d2a.4094b8",
+	"type": "ui_gauge",
+	"z": "cf2f140b.3f783",
+	"name": "Thermostat Temperature",
+	"group": "ab27421e.a54d7",
+	"order": 2,
+	"width": 0,
+	"height": 0,
+	"gtype": "gage",
+	"title": "Room Temperature",
+	"label": "°C",
+	"format": "{{value}}",
+	"min": "-10",
+	"max": "52",
+	"colors": [
+		"#00b500",
+		"#e6e600",
+		"#ca3838"
+	],
+	"x": 807.7323989868164,
+	"y": 287.33327293395996,
+	"wires": []
+}, {
+	"id": "bd898ae5.bfcfb8",
+	"type": "ui_chart",
+	"z": "cf2f140b.3f783",
+	"name": "",
+	"group": "ab27421e.a54d7",
+	"order": 3,
+	"width": 0,
+	"height": 0,
+	"label": "Running Temperature",
+	"chartType": "line",
+	"xformat": "%H:%M:%S",
+	"interpolate": "linear",
+	"nodata": "",
+	"ymin": "-10",
+	"ymax": "52",
+	"removeOlder": 1,
+	"removeOlderUnit": "60",
+	"x": 748.4615821838379,
+	"y": 335.49995040893555,
+	"wires": [
+		[],
+		[]
+	]
+}, {
+	"id": "ef065b8c.523fa",
+	"type": "function",
+	"z": "cf2f140b.3f783",
+	"name": "Format Data",
+	"func": "msg.payload.data = msg.payload.d.ActualTemperature;\nreturn msg;",
+	"outputs": 1,
+	"noerr": 0,
+	"x": 350,
+	"y": 124.28921508789062,
+	"wires": [
+		[
+			"73177468.b809ac",
+			"e2f2cda8.9f80b"
+		]
+	]
+}, {
+	"id": "65205ee.26d79a",
+	"type": "function",
+	"z": "31cee127.08c1a6",
+	"name": "set selected to global",
+	"func": "context.global.selectedDevice = msg.payload;\nreturn msg;",
+	"outputs": 1,
+	"noerr": 0,
+	"x": 762.355598449707,
+	"y": 231.64445686340332,
+	"wires": [
+		[
+			"cf760f1f.b445"
+		]
+	]
+}, {
+	"id": "76eeb964.602d9",
+	"type": "switch",
+	"z": "cf2f140b.3f783",
+	"name": "",
+	"property": "deviceId",
+	"propertyType": "msg",
+	"rules": [{
+		"t": "eq",
+		"v": "selectedDevice.deviceId",
+		"vt": "global"
+	}, {
+		"t": "else"
+	}],
+	"checkall": "true",
+	"outputs": 2,
+	"x": 195.46664428710938,
+	"y": 130.80001831054688,
+	"wires": [
+		[
+			"ef065b8c.523fa"
+		],
+		[]
+	]
+}, {
+	"id": "cf760f1f.b445",
+	"type": "ui_text",
+	"z": "31cee127.08c1a6",
+	"group": "ab27421e.a54d7",
+	"order": 1,
+	"width": 0,
+	"height": 0,
+	"name": "",
+	"label": "Thermostat: ",
+	"format": "{{msg.payload.deviceId}}",
+	"layout": "row-spread",
+	"x": 985.7361145019531,
+	"y": 231.45341777801514,
+	"wires": []
+}, {
+	"id": "795df543.f17054",
+	"type": "link out",
+	"z": "31cee127.08c1a6",
+	"name": "Simulation Dashboard Outlink",
+	"links": [
+		"ec82db05.2480f"
+	],
+	"x": 524.4444961547852,
+	"y": 553.0000228881836,
+	"wires": []
+}, {
+	"id": "96d26acb.b67888",
+	"type": "link out",
+	"z": "31cee127.08c1a6",
+	"name": "Simulation Dashboard Outlink",
+	"links": [
+		"ec82db05.2480f"
+	],
+	"x": 676.6665840148926,
+	"y": 682.5555839538574,
+	"wires": []
+}, {
+	"id": "7c499ea2.ed98f8",
+	"type": "comment",
+	"z": "31cee127.08c1a6",
+	"name": "Dashboard Input",
+	"info": "",
+	"x": 775.5556869506836,
+	"y": 681.4445209503174,
+	"wires": []
+}, {
+	"id": "49f81b54.70bc44",
+	"type": "comment",
+	"z": "31cee127.08c1a6",
+	"name": "Dashboard Input",
+	"info": "",
+	"x": 624.4444160461426,
+	"y": 552.111120223999,
+	"wires": []
+}, {
+	"id": "5c708843.7b527",
+	"type": "comment",
+	"z": "31cee127.08c1a6",
+	"name": "RedirectStart",
+	"info": "Redirect Start to the corrosponding virtual Device",
+	"x": 108,
+	"y": 990,
+	"wires": []
+}, {
+	"id": "885e00ed.1cb09",
+	"type": "comment",
+	"z": "31cee127.08c1a6",
+	"name": "RedirectStop",
+	"info": "Redirect Stop to the corrosponding virtual Device",
+	"x": 107,
+	"y": 1096,
+	"wires": []
+}, {
+	"id": "49ef9ab6.09f574",
+	"type": "link in",
+	"z": "31cee127.08c1a6",
+	"name": "Redirect Start",
+	"links": [
+		"6295b649.ea757",
+		"cd977e69.25eee8"
+	],
+	"x": 84,
+	"y": 1034,
+	"wires": [
+		[
+			"2cce313c.61a8a6"
+		]
+	]
+}, {
+	"id": "396ed2b6.2cbe9e",
+	"type": "link in",
+	"z": "31cee127.08c1a6",
+	"name": "Redirect Stop",
+	"links": [
+		"5e1fa057.2bb7a8",
+		"732abf84.4f55d8"
+	],
+	"x": 83.88890647888184,
+	"y": 1147.444414138794,
+	"wires": [
+		[
+			"1893ecd1.e3314b"
+		]
+	]
+}, {
+	"id": "20326562.0d2932",
+	"type": "link out",
+	"z": "31cee127.08c1a6",
+	"name": "Simulator StartDevice",
+	"links": [
+		"8f91e3a6.1b6fe",
+		"39620351.b34c7c",
+		"a989e259.87d89",
+		"99a30096.aeefd",
+		"a0bf9407.f370f8",
+		"181b443c.1dbc8c"
+	],
+	"x": 320.0000305175781,
+	"y": 1028.2222290039062,
+	"wires": []
+}, {
+	"id": "3fa88287.990a36",
+	"type": "link out",
+	"z": "31cee127.08c1a6",
+	"name": "Simulator StopDevice",
+	"links": [
+		"3215dd1a.0690d2"
+	],
+	"x": 322.2222595214844,
+	"y": 1141.77783203125,
+	"wires": []
+}, {
+	"id": "e5ca46e.344f138",
+	"type": "comment",
+	"z": "31cee127.08c1a6",
+	"name": "Stop Thermostat Device",
+	"info": "",
+	"x": 443.3730525970459,
+	"y": 1140.3493375778198,
+	"wires": []
+}, {
+	"id": "2cce313c.61a8a6",
+	"type": "switch",
+	"z": "31cee127.08c1a6",
+	"name": "",
+	"property": "payload.deviceType",
+	"propertyType": "msg",
+	"rules": [{
+		"t": "eq",
+		"v": "Thermostat",
+		"vt": "str"
+	}, {
+		"t": "else"
+	}],
+	"checkall": "true",
+	"outputs": 2,
+	"x": 193.88890838623047,
+	"y": 1034.1110286712646,
+	"wires": [
+		[
+			"20326562.0d2932"
+		],
+		[]
+	]
+}, {
+	"id": "1893ecd1.e3314b",
+	"type": "switch",
+	"z": "31cee127.08c1a6",
+	"name": "",
+	"property": "payload.deviceType",
+	"propertyType": "msg",
+	"rules": [{
+		"t": "eq",
+		"v": "Thermostat",
+		"vt": "str"
+	}, {
+		"t": "else"
+	}],
+	"checkall": "true",
+	"outputs": 2,
+	"x": 192.2222442626953,
+	"y": 1146.888916015625,
+	"wires": [
+		[
+			"3fa88287.990a36"
+		],
+		[]
+	]
+}, {
+	"id": "6295b649.ea757",
+	"type": "link out",
+	"z": "31cee127.08c1a6",
+	"name": "From Add Device to flow context Start",
+	"links": [
+		"49ef9ab6.09f574"
+	],
+	"x": 972.7778577804565,
+	"y": 372.3332986831665,
+	"wires": []
+}, {
+	"id": "a3939bb5.313c58",
+	"type": "comment",
+	"z": "31cee127.08c1a6",
+	"name": "RedirectStart",
+	"info": "Redirect Start to the corrosponding vertual Device",
+	"x": 1062.77783203125,
+	"y": 372.3333435058594,
+	"wires": []
+}, {
+	"id": "5e1fa057.2bb7a8",
+	"type": "link out",
+	"z": "31cee127.08c1a6",
+	"name": "From Delete Device stop",
+	"links": [
+		"396ed2b6.2cbe9e"
+	],
+	"x": 522.22230052948,
+	"y": 467.5555610656738,
+	"wires": []
+}, {
+	"id": "f29c0cff.5ff738",
+	"type": "comment",
+	"z": "31cee127.08c1a6",
+	"name": "RedirectStop",
+	"info": "Redirect Stop to the corrosponding vertual Device",
+	"x": 611.8890686035156,
+	"y": 466.3333683013916,
+	"wires": []
+}, {
+	"id": "732abf84.4f55d8",
+	"type": "link out",
+	"z": "31cee127.08c1a6",
+	"name": "From UI Switch Stop",
+	"links": [
+		"396ed2b6.2cbe9e"
+	],
+	"x": 675.000054359436,
+	"y": 156.6666717529297,
+	"wires": []
+}, {
+	"id": "2799cad.15610b6",
+	"type": "comment",
+	"z": "31cee127.08c1a6",
+	"name": "RedirectStop",
+	"info": "Redirect Stop to the corrosponding vertual Device",
+	"x": 764.6668224334717,
+	"y": 155.44447898864746,
+	"wires": []
+}, {
+	"id": "cd977e69.25eee8",
+	"type": "link out",
+	"z": "31cee127.08c1a6",
+	"name": "From UI Switch Start",
+	"links": [
+		"49ef9ab6.09f574"
+	],
+	"x": 675.0000610351562,
+	"y": 117.77776718139648,
+	"wires": []
+}, {
+	"id": "df56572c.df7168",
+	"type": "comment",
+	"z": "31cee127.08c1a6",
+	"name": "RedirectStart",
+	"info": "Redirect Start to the corrosponding vertual Device",
+	"x": 764.0000352859497,
+	"y": 117.77781200408936,
+	"wires": []
+}, {
+	"id": "cdea97fa.6a17b",
+	"type": "comment",
+	"z": "31cee127.08c1a6",
+	"name": "NOTE: Adding another simuation device type",
+	"info": "Add the device type in the switch case and link it to start and stop of your simulated devices",
+	"x": 692.0556182861328,
+	"y": 1080.8889179229736,
+	"wires": []
+}, {
+	"id": "b2068154.65f59",
+	"type": "comment",
+	"z": "31cee127.08c1a6",
+	"name": "Start Thermostat Device",
+	"info": "",
+	"x": 448.7700443267822,
+	"y": 1027.6984786987305,
+	"wires": []
+}, {
+	"id": "81ac37f6.2138d8",
+	"type": "link in",
+	"z": "31cee127.08c1a6",
+	"name": "Add Device to flow context",
+	"links": [
+		"b8ab5732.b593e"
+	],
+	"x": 606.2222213745117,
+	"y": 383.2222194671631,
+	"wires": [
+		[
+			"9f6d4d.1c1412b"
+		]
+	]
+}, {
+	"id": "b8ab5732.b593e",
+	"type": "link out",
+	"z": "31cee127.08c1a6",
+	"name": "From DB sync",
+	"links": [
+		"81ac37f6.2138d8"
+	],
+	"x": 892.7777709960938,
+	"y": 805.0000076293945,
+	"wires": []
+}, {
+	"id": "3b38c452.19c7d4",
+	"type": "comment",
+	"z": "31cee127.08c1a6",
+	"name": "Add Device to flow context",
+	"info": "",
+	"x": 1022.1111526489258,
+	"y": 805.0000219345093,
+	"wires": []
+}, {
+	"id": "21f3a1b5.b6e86e",
+	"type": "comment",
+	"z": "31cee127.08c1a6",
+	"name": "Add Device to flow context",
+	"info": "",
+	"x": 474.5555419921875,
+	"y": 382.1111259460449,
+	"wires": []
+}, {
+	"id": "b8ae6535.0da21",
+	"type": "function",
+	"z": "c3271096.6f1c08",
+	"name": "Email change",
+	"func": "var evt = 'emailChange';\nvar value = msg.payload;\n\nmsg.payload = {\n    eventType: evt,\n    data: value\n};\nmsg.payload=JSON.stringify({eventType: evt,data: value});\nreturn msg;\n",
+	"outputs": 1,
+	"noerr": 0,
+	"x": 691.0999755859375,
+	"y": 515.7999877929688,
+	"wires": [
+		[
+			"ce4cdbc0.6c3408"
+		]
+	]
+}, {
+	"id": "d97f485f.fc1e1",
+	"type": "function",
+	"z": "c3271096.6f1c08",
+	"name": "Cut OutTemperatrure Change",
+	"func": "var evt = 'CutOutTempChange';\nvar value = msg.payload;\ncontext.global.CutOutTemperature=36;\nmsg.payload = {\n    eventType: evt,\n    data: value\n};\nmsg.payload=JSON.stringify({eventType: evt,data: value});\nreturn msg;\n",
+	"outputs": 1,
+	"noerr": 0,
+	"x": 740.0999145507812,
+	"y": 303.2999572753906,
+	"wires": [
+		[
+			"ce4cdbc0.6c3408"
+		]
+	]
+}, {
+	"id": "bb016aa7.4c1fd",
+	"type": "function",
+	"z": "c3271096.6f1c08",
+	"name": "Cut In Temperature Change",
+	"func": "var evt = 'CutInTempChange';\nvar value = msg.payload;\ncontext.global.CutInTemperature=16;\nmsg.payload = {\n    eventType: evt,\n    data: value\n};\nmsg.payload=JSON.stringify({eventType: evt,data: value});\nreturn msg;\n",
+	"outputs": 1,
+	"noerr": 0,
+	"x": 730.0999145507812,
+	"y": 354.29998779296875,
+	"wires": [
+		[
+			"ce4cdbc0.6c3408"
+		]
+	]
+}, {
+	"id": "3393deb8.021572",
+	"type": "ui_text_input",
+	"z": "c3271096.6f1c08",
+	"name": "",
+	"label": "Service Engineer EMail ID",
+	"group": "69c676d0.fdddb",
+	"order": 7,
+	"width": "",
+	"height": "",
+	"passthru": true,
+	"mode": "email",
+	"delay": 300,
+	"topic": "",
+	"x": 411.24072265625,
+	"y": 515.0682983398438,
+	"wires": [
+		[
+			"b8ae6535.0da21"
+		]
+	]
+}, {
+	"id": "c719e07a.fe4a4",
+	"type": "ui_numeric",
+	"z": "c3271096.6f1c08",
+	"name": "Email frequency",
+	"label": "Email frequency [ seconds ]",
+	"group": "69c676d0.fdddb",
+	"order": 8,
+	"width": 0,
+	"height": 0,
+	"passthru": true,
+	"topic": "",
+	"format": "{{value}}",
+	"min": 0,
+	"max": "120",
+	"x": 383.74072265625,
+	"y": 583.0682983398438,
+	"wires": [
+		[
+			"b00f77f2.ff6fb8"
+		]
+	]
+}, {
+	"id": "b00f77f2.ff6fb8",
+	"type": "function",
+	"z": "c3271096.6f1c08",
+	"name": "AlertFrequencyChange",
+	"func": "var evt = 'alertFrequencyChange';\nvar value = msg.payload;\n\nmsg.payload = {\n    eventType: evt,\n    data: value\n};\nmsg.payload=JSON.stringify({eventType: evt,data: value});\nreturn msg;\n\n",
+	"outputs": 1,
+	"noerr": 0,
+	"x": 721.99072265625,
+	"y": 582.8182983398438,
+	"wires": [
+		[
+			"ce4cdbc0.6c3408"
+		]
+	]
+}, {
+	"id": "2c94c97c.529fae",
+	"type": "inject",
+	"z": "c3271096.6f1c08",
+	"name": "Set Default Value",
+	"topic": "",
+	"payload": "60",
+	"payloadType": "num",
+	"repeat": "",
+	"crontab": "",
+	"once": true,
+	"x": 179.49072265625,
+	"y": 583.0682983398438,
+	"wires": [
+		[
+			"c719e07a.fe4a4"
+		]
+	]
+}, {
+	"id": "78ea9b9a.1d2d84",
+	"type": "inject",
+	"z": "c3271096.6f1c08",
+	"name": "",
+	"topic": "",
+	"payload": "36",
+	"payloadType": "num",
+	"repeat": "",
+	"crontab": "",
+	"once": true,
+	"x": 147.49072265625,
+	"y": 303.9293899536133,
+	"wires": [
+		[
+			"6feed4e5.79c39c"
+		]
+	]
+}, {
+	"id": "8922116e.cbc858",
+	"type": "inject",
+	"z": "c3271096.6f1c08",
+	"name": "",
+	"topic": "",
+	"payload": "16",
+	"payloadType": "num",
+	"repeat": "",
+	"crontab": "",
+	"once": true,
+	"x": 148.38656616210938,
+	"y": 354.95719146728516,
+	"wires": [
+		[
+			"dd9cbab.74244c8"
+		]
+	]
+}, {
+	"id": "4c490c41.50cbf4",
+	"type": "inject",
+	"z": "c3271096.6f1c08",
+	"name": "",
+	"topic": "",
+	"payload": "monitoringserviceengineer@gmail.com",
+	"payloadType": "str",
+	"repeat": "",
+	"crontab": "",
+	"once": true,
+	"x": 149.49072265625,
+	"y": 516.0683059692383,
+	"wires": [
+		[
+			"3393deb8.021572"
+		]
+	]
+}, {
+	"id": "6feed4e5.79c39c",
+	"type": "ui_numeric",
+	"z": "c3271096.6f1c08",
+	"name": "",
+	"label": "High temp. alarm threshold",
+	"group": "69c676d0.fdddb",
+	"order": 2,
+	"width": "8",
+	"height": "1",
+	"passthru": true,
+	"topic": "",
+	"format": "{{value}} ˚C",
+	"min": "25",
+	"max": "40",
+	"x": 419.49072265625,
+	"y": 303.63970947265625,
+	"wires": [
+		[
+			"d97f485f.fc1e1"
+		]
+	]
+}, {
+	"id": "294641d.2900dbe",
+	"type": "ui_text",
+	"z": "c3271096.6f1c08",
+	"group": "69c676d0.fdddb",
+	"order": 3,
+	"width": "6",
+	"height": "1",
+	"name": "Desired temp. label",
+	"label": "Desired temp.",
+	"format": "",
+	"layout": "row-left",
+	"x": 389.49072265625,
+	"y": 406.6397171020508,
+	"wires": []
+}, {
+	"id": "1e3f5640.c74a32",
+	"type": "inject",
+	"z": "c3271096.6f1c08",
+	"name": "",
+	"topic": "",
+	"payload": "23",
+	"payloadType": "num",
+	"repeat": "",
+	"crontab": "",
+	"once": true,
+	"x": 149.49072265625,
+	"y": 405.63970947265625,
+	"wires": [
+		[
+			"b76d95d.6d37ae8"
+		]
+	]
+}, {
+	"id": "dd9cbab.74244c8",
+	"type": "ui_numeric",
+	"z": "c3271096.6f1c08",
+	"name": "",
+	"label": "Low temp. alert threshold",
+	"group": "69c676d0.fdddb",
+	"order": 5,
+	"width": "8",
+	"height": "1",
+	"passthru": true,
+	"topic": "",
+	"format": "{{value}} ˚C",
+	"min": "10",
+	"max": "25",
+	"x": 407.49073791503906,
+	"y": 354.63970947265625,
+	"wires": [
+		[
+			"bb016aa7.4c1fd"
+		]
+	]
+}, {
+	"id": "392b72cb.7b0d3e",
+	"type": "ui_text",
+	"z": "c3271096.6f1c08",
+	"group": "69c676d0.fdddb",
+	"order": 1,
+	"width": 0,
+	"height": 0,
+	"name": "Intro. text",
+	"label": "These alert notification settings apply to all rooms.",
+	"format": "",
+	"layout": "row-spread",
+	"x": 361.49072265625,
+	"y": 253.63970947265625,
+	"wires": []
+}, {
+	"id": "442bf45b.1390fc",
+	"type": "ui_text",
+	"z": "c3271096.6f1c08",
+	"group": "69c676d0.fdddb",
+	"order": 6,
+	"width": 0,
+	"height": 0,
+	"name": "Alert explanations",
+	"label": "Warning threshold triggers an on-screen alert, alarm threshold triggers an email alert.",
+	"format": "",
+	"layout": "row-spread",
+	"x": 390.49072265625,
+	"y": 461.63970947265625,
+	"wires": []
+}, {
+	"id": "b76d95d.6d37ae8",
+	"type": "ui_text",
+	"z": "c3271096.6f1c08",
+	"group": "69c676d0.fdddb",
+	"order": 4,
+	"width": "2",
+	"height": "1",
+	"name": "Desired temp. value",
+	"label": "",
+	"format": "23 ˚C",
+	"layout": "row-left",
+	"x": 709.49072265625,
+	"y": 406.63970947265625,
+	"wires": []
+}]

@@ -1,0 +1,92 @@
+<!--
+Copyright 2014, 2015, 2016 IBM Corp.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<!-- start virtual device -->
+
+<script type="text/x-red" data-template-name="start virtual device">
+<div class="form-row">
+<label for="node-input-name" style="width:130px;"><i class="fa fa-tag"></i> Name</label>
+<input type="text" id="node-input-name" placeholder="start virtual device" style="width:300px;">
+</div>
+
+<div class="form-row">
+<label for="node-input-deviceId" style="width:130px;"><i class="fa fa-street-view"></i> Device Id</label>
+<input type="text" id="node-input-deviceId"  style="width:300px;">
+</div>
+
+<div class="form-row" id = "node-input-schema-div">
+<label for="node-input-schema" id="node-input-schemaLabel" style="width:130px;"><i class="fa fa-sitemap"></i> Device Schema</label>
+<input type="text" id="node-input-schema" style="width:300px;">
+</div>
+<div class="form-tips"><b>Tip:</b> leave the device Id blank if you want to set it by using <b>msg.payload.deviceId</b>.</div>
+</script>
+
+
+<script type="text/x-red" data-help-name="start virtual device">
+<p>
+Create a virtual device that conforms to a device type schema with a given ID.<br>
+You can set the ID in the Device Id field in the dialog or via the input message.<br>
+To connect the device to IBM Watson IoT Platform you must also register the Device ID in the platform.<br>
+<p>
+<b>Important:</b> To use the out-of-the-box simulator dashboard,  use an input link to connect this node to the <i>Start Device</i> link in the simulator dashboard flow.
+The connection lets the simulator dashboard create and auto register the devices without the need to manually register and will add the device in the simulator dashboard UI.
+</p>
+<ul>
+<li><h4>Input:</h4>
+<ul>
+<li><code>msg.payload.deviceId</code>: The device Id.</li>
+<li><code>msg.payload.properties{{property Name}} (e.g. msg.payload.properties.temperature)</code> <b>Optional:</b> Use to override property values that are specified as initial values in the device type schema.</li>
+</ul>
+</li>
+<li><h4>Output:</h4>
+<ul>
+<li><code>msg.payload.deviceId</code>: The newly created virtual device ID.</li>
+<li><code>msg.payload.deviceType</code>: The newly created virtual device type.</li>
+<li><code>msg.payload.properties</code>: Object with the properties and values of the newly created virtual device (e.g. {temperature: 20}).</li>
+</ul>
+</li>
+</p>
+<p>
+<b>Note:</b> If the device already exist, a warning is posted in the debug window, the flow stops, and no output is sent to the next node.
+</p>
+
+</script>
+
+
+
+<script type="text/javascript">
+RED.nodes.registerType('start virtual device',{
+	category: 'Virtual_IoT_Device',
+	color:"#9DCF5C",
+	defaults: {
+		name: {value:""},
+		deviceId: {value:""},
+		schema: {type:"Device Schema", required: true},
+		outputs: {value:1},
+	},
+	inputs:1,
+	outputs:1,
+	icon: "vdStart.png",
+	label: function() {
+		return this.name || "start virtual device";
+	},
+	labelStyle: function() {
+		return this.name ? "node_label_italic" : "";
+	}
+});
+
+
+</script>

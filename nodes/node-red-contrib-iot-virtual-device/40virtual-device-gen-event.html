@@ -1,0 +1,123 @@
+<!--
+Copyright 2014, 2015, 2016 IBM Corp.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+
+
+<!-- generate event-->
+
+
+<script type="text/x-red" data-template-name="generate event">
+<div class="form-row">
+<label for="node-input-name" style="width:130px;"><i class="fa fa-tag"></i> Name</label>
+<input type="text" id="node-input-name" placeholder="Send Event" style="width:300px;">
+</div>
+
+
+<div class="form-row">
+<label for="node-input-deviceId" style="width:130px;"><i class="fa fa-street-view"></i> Device Id</label>
+<input type="text" id="node-input-deviceId"  style="width:300px;">
+</div>
+
+<div class="form-row" id = "node-input-schema-div">
+<label for="node-input-schema" id="node-input-schemaLabel" style="width:130px;"><i class="fa fa-sitemap"></i> Device Schema</label>
+<input type="text" id="node-input-schema" style="width:300px;">
+</div>
+
+<div class="form-row">
+<label for="node-input-evt" id="node-input-evtLabel" style="width:130px;"><i class="fa fa-bolt"></i> Event</label>
+<select id="node-input-evt"  style="width:300px;">
+</select>
+</div>
+<div class="form-tips"><b>Tip:</b> Leave the device Id blank if you want to set it by using <b>msg.payload.deviceId</b>.</div>
+</script>
+
+
+<script type="text/x-red" data-help-name="generate event">
+<p>
+Connect this node to IBM IoT Output node for sending the virtual device event
+where the payload values are taken from the device instance properties.
+</p>
+<p>
+<ul>
+<li><h4>Input:</h4></li>
+<ul>
+<li><code>msg.payload.deviceId</code>: the ID of the device</li>
+<li><code>msg.payload.eventName</code>: the name of the event (as specified in the schema)</li>
+</ul>
+<li><h4>Output:</h4></li>
+<p>
+A message with all necessary fields to be sent via an IBM IoT output node.
+</p>
+</ul>
+</p>
+
+</script>
+
+
+
+<script type="text/javascript">
+RED.nodes.registerType('generate event',{
+	category: 'Virtual_IoT_Device',
+	color:"#5AAAFA",
+	defaults: {
+		deviceId: {value:""},
+		schema: {type:"Device Schema", required: false},
+		evt: {value:""},
+		name: { value:"" }
+	},
+	inputs:1,
+	outputs:1,
+	icon: "vdEvent.png",
+	label: function() {
+		return this.name || "simulated device event";
+	},
+	labelStyle: function() {
+		return this.name ? "node_label_italic" : "";
+	},
+	oneditsave: function() {
+	},
+	oneditprepare: function() {
+		var _this = this;
+
+		function populateEventsFromSchema(schemaId){
+			$('#node-input-evt').find('option').remove();
+			if(!schemaId || schemaId === "") return;
+			RED.nodes.eachConfig(function(config) {
+				if(schemaId === config.id){
+					for (var i=0; i<config.evts.length; i++) {
+						var evt = config.evts[i];
+						$('#node-input-evt').append($('<option>', {
+							value: evt.guid,
+							text: evt.name
+						}));
+					}
+				}
+			});
+			$("#node-input-evt").val(_this.evt);
+		}
+
+
+		$("#node-input-schema").change(function() {
+			var schemaId = $("#node-input-schema").val();
+			populateEventsFromSchema(schemaId);
+		});
+
+		populateEventsFromSchema(this.schema);
+
+	}
+});
+
+</script>
