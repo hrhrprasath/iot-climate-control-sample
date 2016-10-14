@@ -1,0 +1,56 @@
+{
+  "author": {
+    "email": "amitmangalvedkar@gmail.com",
+    "name": "Amit M Mangalvedkar"
+  },
+  "dependencies": {
+    "cfenv": "1.0.0",
+    "ibmiotf": "^0.2.18",
+    "is-utf8": "^0.2.1"
+  },
+  "description": "IoT Application Node-RED node for the Registered and Quickstart flows in IBM Watson IoT Platform",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "6b459b41866fa4d811acd74041362f7d2bebcfe4",
+    "tarball": "https://registry.npmjs.org/node-red-contrib-scx-ibmiotapp/-/node-red-contrib-scx-ibmiotapp-0.0.42.tgz"
+  },
+  "keywords": [
+    "node-red",
+    "bluemix",
+    "iotcloud"
+  ],
+  "license": "Apache",
+  "maintainers": [
+    {
+      "email": "amitmangalvedkar@gmail.com",
+      "name": "amitmangalvedkar"
+    },
+    {
+      "email": "jeffdare@in.ibm.com",
+      "name": "jeffdare"
+    },
+    {
+      "email": "lokesh.h.k@in.ibm.com",
+      "name": "lokesh.h.k"
+    },
+    {
+      "email": "tim.jacobi@uk.ibm.com",
+      "name": "tim.jacobi"
+    }
+  ],
+  "name": "node-red-contrib-scx-ibmiotapp",
+  "node-red": {
+    "nodes": {
+      "ibmiotapp": "application/97-iotnewapp-cf.js"
+    }
+  },
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ibm-messaging/iot-nodered/tree/master/node-red-contrib-scx-ibmiotapp"
+  },
+  "scripts": {},
+  "version": "0.0.43"
+}

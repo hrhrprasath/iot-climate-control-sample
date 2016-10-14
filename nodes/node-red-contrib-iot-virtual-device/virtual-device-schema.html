@@ -1,0 +1,413 @@
+<!--
+Copyright 2014, 2015, 2016 IBM Corp.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<!-- Device Schema-->
+<script type="text/x-red" data-template-name="Device Schema">
+
+<div class="form-row">
+<label for="node-config-input-deviceType"><i class="fa fa-rocket"></i> Device Type</label>
+<input type="text" id="node-config-input-deviceType">
+</div>
+<div class="form-row node-input-props-container-row">
+<label for="form-row node-input-props-container-row"><i class="fa fa-cog"></i> Properties</label>
+<ol id="node-input-props-container"></ol>
+</div>
+<div class="form-row node-input-evts-container-row">
+<label for="form-row node-input-evts-container-row"><i class="fa fa-bolt"></i> Events</label>
+<ol id="node-input-evts-container"></ol>
+</div>
+<link rel="stylesheet" href="simulatedDevice/js/bootstrap-multiselect.css" type="text/css"/>
+</script>
+
+<script type="text/x-red" data-help-name="Device Schema">
+<p>
+This configuration node is used to define an IoT device type schema.
+Once a schema is defined, the nodes under “Virtual_IoT_Device”
+can be used to simulated virtual devices conforming to the schema.
+</p>
+<p>
+The schema consists of the following:
+<p>
+<ol>
+<li>
+<b>Device Type:</b> The name of the device type conforming to the schema, for example: ConnectedCar.
+This must be a legal name for device types in the IBM Watson IoT Platform.
+</li>
+<li>
+<b>Properties:</b> The device properties that hold the values for device instances at runtime.<br>
+A property definition consists of:<br>
+<ul>
+<li><b>name:</b> The name of the property</li>
+<li><b>type:</b> The type of the property (e.g. Number)</li>
+<li><b>initial value:</b> The default value assigned to the property when a new instance of the device type is created. This could be
+a simple expression (e.g. 10 or "Hello") or it could be set to a random value in case of numbers (see form) </li>
+</ul>
+<li><b>Events</b> Events instances of the devices may send.<br>
+An event definition consists of:<br>
+<ul>
+<li><b>event name:</b> The name of the event</li>
+<li><b>payload:</b> a list of properties (e.g. temp, isOn) whose values are expected to be sent
+via the event or static values (e.g. “Hello”)</li>
+</ul>
+</li>
+</li>
+</ol>
+</p>
+</p>
+</script>
+
+<script type="text/javascript">
+$.getScript('simulatedDevice/js/bootstrap-multiselect.js');
+RED.nodes.registerType('Device Schema',{
+category: 'config',
+color:"rgb(0, 155, 255)",
+defaults: {
+	deviceType: { value:"", required: true},
+	props: {value: []},
+	evts: {value: []
+	},
+
+},
+label: function() {
+	return (this.deviceType) ? this.deviceType + " Schema" : "device schema";
+},
+oneditprepare: function() {
+	var node = this;
+
+	node.getEvents = function(){
+		var evts = $("#node-input-evts-container").editableList('items');
+		var events = [];
+		evts.each(function(i) {
+			var item = $(this);
+			var evt = {};
+			evt.guid = item.find(".node-input-evts-evt-item")[0].id;
+			evt.name = item.find(".node-input-evts-value")[0].value;
+			var payload = item.find(".node-input-evts-payload option:selected").map(function(a, item){return item.value;});
+			if(payload.length > 0){
+				evt.payload = {properties: payload.slice()};
+			}
+			events.push(evt);
+		});
+		return events;
+	};
+
+	node.getProperties = function (){
+		var props = $("#node-input-props-container").editableList('items');
+		var properties = [];
+		props.each(function(i) {
+			var prp = {};
+			var item = $(this);
+			var prpElem = item.find(".node-input-props-prp-item")[0];
+			if(!prpElem)
+			return;
+			prp.guid = prpElem.id;
+			prp.name = item.find(".node-input-props-value")[0].value;
+			if(item.find(".node-input-props-rnd-check").is(":checked")){
+				prp.random = {};
+				prp.random.func = item.find(".node-input-props-rnd-func").val();
+				var argsSpan = item.find(".node-input-props-rnd-args");
+				if(argsSpan){
+					prp.random.args = {};
+					var argsLables = argsSpan.find(".node-input-props-rnd-arg-label");
+					var argsvalues = argsSpan.find(".node-input-props-rnd-arg-value");
+					for (var i = 0; i < argsLables.length; i++) {
+						var val = (argsvalues[i].type === "checkbox") ? argsvalues[i].checked : argsvalues[i].value;
+						try {
+							val = JSON.parse(val);
+						} catch (e) {
+						}
+						var label = argsLables[i].textContent || argsLables[i].innerText;
+						prp.random.args[label] = val;
+					}
+				}
+			}
+			else{
+				prp.defaultValue = {};
+				var defaultValue = item.find(".node-input-props-default-value");
+				prp.defaultValue.type = defaultValue.typedInput("type");
+				prp.defaultValue.value = defaultValue.typedInput("value");
+			}
+			properties.push(prp);
+		});
+		return properties;
+	};
+
+	node.genGuid = function() {
+		var guid = Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+		guid += Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+		guid += Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+		return guid;
+	};
+
+	node.onPropertiesChange = function(){
+		//update all events payload
+		var properties = node.getProperties();
+		var evts = $("#node-input-evts-container").editableList('items');
+		var events = [];
+		evts.each(function(i) {
+			var item = $(this);
+			var multiSelect = $(item.find(".node-input-evts-payload")[0]);
+			if(!multiSelect)
+			return;
+			var selectedPayload = item.find(".node-input-evts-payload option:selected").map(function(a, item){return item.value;}).toArray();
+			//remove all options
+			multiSelect.find(".node-input-evts-payload-prp").remove()
+			for (var p = 0; p < properties.length; p++) {
+				var prop = properties[p];
+				multiSelect.append($("<option></option>", {class: "node-input-evts-payload-prp"}).val(prop.guid).text(prop.name));
+			}
+			multiSelect.multiselect('rebuild');
+			multiSelect.multiselect('select', selectedPayload);
+			multiSelect.multiselect('refresh');
+
+		});
+	};
+
+	var randomOptions = {
+		Basics: [
+			{name: "integer", args : {min: 0, max :100}},
+			{name: "floating", args : {min: 0, max :100, fixed: 4}},
+			{name: "natural", args : {min: 0, max :100}},
+			{name: "bool", args: {likelihood: 30}},
+			{name: "string", args : {length: 5}}
+		],
+		Id: [
+			{name: "guid"},
+			{name: "ip"},
+			{name: "ipv6"},
+			{name: "mac_address", args : {separator: ":"}}
+		],
+		Location: [
+			{name: "address", args : {short_suffix: true}},
+			{name: "city"},
+			{name: "coordinates"},
+			{name: "country", args : {full: true}},
+			{name: "latitude"},
+			{name: "longitude"},
+			{name: "state"},
+			{name: "street", args : {short_suffix: true}},
+			{name: "zip", args: {plusfour: true}}
+		]
+	}
+
+	$("#node-input-props-container").css('min-height','250px').css('min-width','450px').editableList({
+		addItem: function(container,i,opt) {
+			var prop = opt;
+			if(prop.guid === undefined){
+				prop.guid = node.genGuid();
+			}
+
+			var row = $('<div/>',{class:"node-input-props-prp-item", id: prop.guid}).appendTo(container);
+			var row1 = $('<div/>',{style:"margin-top:8px;"}).appendTo(container);
+			var row2 = $('<div/>',{style:"margin-top:8px;"}).appendTo(container);
+			var row3 = $('<div/>',{style:"margin-top:8px;"}).appendTo(container);
+			var row4 = $('<div/>',{style:"margin-top:8px;"}).appendTo(container);
+
+			//row 1 property name
+			$('<span/>',{class:"node-input-props-value-label"}).text(" Name ").appendTo(row1);
+			var propertyName = $('<input/>',
+			{class:"node-input-props-value",type:"text",style:"margin-left: 5px; width: 145px;", value: prop.name})
+			.appendTo(row1)
+			.change(function(){node.onPropertiesChange();});
+
+			//row 2 "Generate Random Value" checkbox
+			var randomCheckbox = $('<input/>',{class:"node-input-props-rnd-check",type:"checkbox",style:"margin-left: 5px; width:auto;vertical-align:middle"})
+			.appendTo(row2);
+			$('<label/>',{for:"node-input-props-random-check-"+i,style:"margin-left: 3px;width: 155px"}).text(" Generate Random Value ").appendTo(row2);
+
+			//row 3 defualt value
+			var propDefaultType = 'str';
+			var propDefaultVal = "";
+			if(prop.defaultValue){
+				propDefaultVal = prop.defaultValue.value;
+				propDefaultType= prop.defaultValue.type;
+			}
+
+			$('<span/>',{class:"node-input-props-value-type-label"}).text(" Default Value ").appendTo(row3);
+			var defaultValue = $('<input/>',{id:"node-input-props-default-value-"+i, style:"margin-left: 5px; ",class:"node-input-props-default-value",type:"text"})
+			.appendTo(row3)
+			.typedInput({default:propDefaultType,types:['str','num','bool','json','date']})
+			.typedInput("value", propDefaultVal);
+			//row 4 - random value
+			var selectRnd = $('<select/>',{class:"node-input-props-rnd-func", style:"width:100px; margin-left: 5px; text-align: center;"})
+			.appendTo(row4);
+			var functionsArgsSpans = {};
+			for (var group in randomOptions) {
+				var optGroup = $("<optgroup>", {label: group});
+				selectRnd.append(optGroup);
+				var funcDescArray = randomOptions[group];
+				for (var f = 0; f < funcDescArray.length; f++) {
+					var funcDesc = funcDescArray[f];
+					optGroup.append($("<option></option>").val(funcDesc.name).text(funcDesc.name));
+					if(funcDesc.args){
+						var args = funcDesc.args;
+						var argsSpan = $('<span/>',{class:"node-input-props-rnd-args", id: "node-input-props-rnd-args-"+i, style:"margin-top: 6px;"});
+						var prpArgs = (prop.random && funcDesc.name === prop.random.func) ? prop.random.args : null;
+						for (var argName in args) {
+							var argValue = (prpArgs) ? prpArgs[argName] : args[argName];
+
+							$('<label/>',{class:"node-input-props-rnd-arg-label", style:"margin-left: 5px;width: auto"}).text(argName).appendTo(argsSpan);
+							if(typeof(args[argName]) === "boolean"){
+								$('<input/>',{class:"node-input-props-rnd-arg-value",type:"checkbox",style:"margin-left: 3px; width:auto;vertical-align:middle"})
+								.prop('checked', argValue)
+								.appendTo(argsSpan);;
+							}
+							else{
+								$('<input/>',{class:"node-input-props-rnd-arg-value", type:"text",style:"margin-left: 3px; width: 50px;", value: argValue})
+								.appendTo(argsSpan);
+							}
+						}
+						functionsArgsSpans[funcDesc.name] = argsSpan;
+					}
+				}
+			}
+
+			randomCheckbox.change(function() {
+				if(randomCheckbox.is(":checked")) {
+					defaultValue.prop("disabled", true);
+					row3.hide();
+					row4.show();
+				} else {
+					defaultValue.prop("disabled", false);
+					row3.show();
+					row4.hide();
+				}
+			});
+
+
+			selectRnd.change(function() {
+				var newArgsSpan = functionsArgsSpans[selectRnd.val()];
+				var currSpan = $("#node-input-props-rnd-args-"+i);
+				if(currSpan){
+					currSpan.detach();
+				}
+				if(newArgsSpan)
+				newArgsSpan.appendTo(row4);
+			});
+
+			if(prop.random){
+				randomCheckbox.prop("checked", true);
+				selectRnd.val(prop.random.func || "integer");
+			}
+			else if(!prop.name){
+				//new element
+				randomCheckbox.prop("checked", true);
+			}
+			else{
+				randomCheckbox.prop("checked", false);
+			}
+			selectRnd.change();
+			randomCheckbox.change();
+
+		},
+		removeItem: function(opt) {
+			node.onPropertiesChange();
+		},
+		sortable: true,
+		removable: true
+	});
+
+	//fill properties
+	for (var i=0;i<node.props.length;i++) {
+		var prop = node.props[i];
+		$("#node-input-props-container").editableList('addItem',prop);
+	}
+
+	$("#node-input-evts-container").css('min-height','250px').css('min-width','450px').editableList({
+		addItem: function(container,i,opt) {
+			var evt = opt;
+			if(evt.guid === undefined){
+				evt.guid = node.genGuid();
+			}
+			$('<div/>').appendTo(container);
+			var row = $('<div/>',{class:"node-input-evts-evt-item", id: evt.guid}).appendTo(container);
+			var row1 = $('<div/>',{style:"margin-top:8px;"}).appendTo(container);
+			var row2 = $('<div/>',{style:"margin-top:8px;"}).appendTo(container);
+			var row3 = $('<div/>',{style:"margin-top:8px;"}).appendTo(container);
+			var row4 = $('<div/>',{style:"margin-top:8px;"}).appendTo(container);
+
+			//row 1 property name
+			$('<span/>',{class:"node-input-evts-value-label"}).text(" Name ").appendTo(row1);
+			var propertyName = $('<input/>',
+			{class:"node-input-evts-value",type:"text",style:"margin-left: 5px; width: 145px;",
+			value: evt.name})
+			.appendTo(row1);
+
+
+			$('<span/>',{class:"node-input-evts-payload-label"}).text(" Payload ").appendTo(row2);
+			var multiSelectPropeties = $('<select/>',{class:"node-input-evts-payload",
+			id: "node-input-evts-payload" + i,
+			multiple: "multiple"
+			//style:"width:auto; margin-left: 5px; text-align: center;"
+		})
+		.appendTo(row2);
+
+
+		var properties = node.getProperties();
+		for (var p = 0; p < properties.length; p++) {
+			var prop = properties[p];
+			multiSelectPropeties.append($("<option></option>", {class:"node-input-evts-payload-prp"}).val(prop.guid).text(prop.name));
+		}
+
+
+		multiSelectPropeties.multiselect({
+			includeSelectAllOption: true,
+			selectAllValue: 'all-prps-value',
+			disableIfEmpty: true,
+			disabledText: 'Choose Properties',
+			nonSelectedText: 'Select Properties',
+			allSelectedText: 'All Properties',
+			numberDisplayed: 10
+		});
+
+
+
+
+		if(evt.payload && evt.payload.properties && evt.payload.properties.length > 0){
+			var payloadIds = [];
+			for (var p = 0; p < evt.payload.properties.length; p++) {
+				payloadIds.push(evt.payload.properties[p]);
+			}
+			multiSelectPropeties.multiselect('select', payloadIds);
+		}
+
+	},
+	removeItem: function(opt) {
+	},
+	sortable: true,
+	removable: true
+});
+
+//fill in events
+for (var i=0;i<node.evts.length;i++) {
+	var evt = node.evts[i];
+	$("#node-input-evts-container").editableList('addItem',evt);
+}
+},
+oneditsave: function() {
+var props = $("#node-input-props-container").editableList('items');
+var node = this;
+node.props = node.getProperties();
+
+
+var evts = $("#node-input-evts-container").editableList('items');
+node.evts = node.getEvents();
+},
+ondelete: function() {
+
+}
+});
+</script>

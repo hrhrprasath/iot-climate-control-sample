@@ -1,0 +1,259 @@
+<!--
+Copyright 2014, 2015, 2016 IBM Corp.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+
+
+<!-- device listener-->
+
+
+<script type="text/x-red" data-template-name="device listener">
+<link rel="stylesheet" href="simulatedDevice/js/bootstrap-multiselect.css" type="text/css"/>
+<div class="form-row">
+<label for="node-input-name" style="width:130px;"><i class="fa fa-tag"></i> Name</label>
+<input type="text" id="node-input-name" placeholder="device listener" style="width:300px;">
+</div>
+
+<div class="form-row">
+<label for="node-input-monitor" style="width:130px;"><i class="fa fa-tachometer"></i> Listen to</label>
+<input type="checkbox" id="node-input-monitorAll" style="width:10px;" >
+<label for="node-input-monitorAll" id="node-input-monitorAllLabel" style="width:40px;">All or </label>
+<select id="node-input-monitor"  style="width:300px;">
+<option value="property">Device Property Changed</option>
+<option value="start">Device Started</option>
+<option value="stop">Device Deleted</option>
+<option value="schema">Schema Deployed</option>
+</select>
+</div>
+
+<div class="form-row" id = "node-input-schema-div">
+<label for="node-input-schema" id="node-input-schemaLabel" style="width:130px;"><i class="fa fa-sitemap"></i> Device Schema</label>
+<input type="checkbox" id="node-input-allSchemas" style="width:10px;" >
+<label for="node-input-allSchemas" id="node-input-allSchemasLabel" style="width:40px;">All or </label>
+<input type="text" id="node-input-schema" style="width:300px;">
+</div>
+
+<div class="form-row hidden" id = "node-input-props-div">
+<label for="node-input-props" id="node-input-propsLabel" style="width:130px;"><i class="fa fa-cog"></i> Properties</label>
+<input type="checkbox" id="node-input-allProps" style="width:10px;" >
+<label for="node-input-allProps" id="node-input-allPropsLabel" style="width:40px;">All or </label>
+<select id="node-input-props"  style="width:300px;" multiple="multiple" disabled="disabled">
+</select>
+</div>
+
+
+<div class="form-row hidden" id = "node-input-deviceId-div">
+<label for="node-input-deviceId" style="width:130px;"><i class="fa fa-street-view"></i> Device Id</label>
+<input type="checkbox" id="node-input-allDeviceIds" style="width:10px;" >
+<label for="node-input-allDeviceIds" id="node-input-allDeviceIdsLabel" style="width:40px;">All or </label>
+<input type="text" id="node-input-deviceId"  placeholder="device id e.g. ab12cd231a21" style="width:300px;">
+</div>
+
+</script>
+
+
+<script type="text/x-red" data-help-name="device listener">
+<p>
+This node is triggered when one or more changes occur in one or more virtual devices.
+For example, if this node is configured to be triggered when a property value changes, whenever the relevant property is assigned a new value, it will trigger this node to send output.<br>
+Use the following parameters to configure the node:<br/>
+
+<dl>
+  <dt>Listen to:</dt>
+  <dd>Set the node to listen to all types of changes or to one of the following change types:
+	<ul>
+	<li><i>Device Property Changed:</i> A new value was set to a virtual device property
+	<li><i>Device Started:</i> A virtual device was created using the "start virtual device" node.
+  <li><i>Device Deleted:</i> A virtual device was deleted using the "stop virtual device" node.
+	<li><i>Schema Deployed:</i> A change in the virtual device schema was deployed
+	</ul></dd>
+  <dt>Device Schema:</dt>
+  <dd>Set the node to listen to all device types (schemas) or to a specific type.
+	Note: Do not set a schema if you want to set the listener to listen to a specific device Id.
+	If you define a Device Schema but the device Id does not match the device type, the change is rejected.
+	If you have selected to listen to <i>"Device Property Changed"</i> you can also select a specific schema property to listen to.</dd>
+</dl>
+
+Output:<br/>
+<ul>
+<li><code>msg.topic</code>: Depending on the event that triggered this output, this might be 'deviceCreated', 'deviceDelete', 'propertyChange' or 'deviceSchema'.</li>
+<li><code>msg.payload.deviceType</code>: The type of the virtual device.</li>
+<li>If the event type is "deviceSchema" then <code>msg.payload</code> is an array of the active devices schemas where each schema object includes an array of the property names and an array of the event names.</li>
+<li>If the event type is "propertyChange" then <code>msg.payload.changedProperty</code> is an object with the details of the property change: name, oldValue, newValue</li>
+<li>If the event type is "deviceSchema" then:</li>
+<ul>
+<li><code>msg.payload.deviceId</code> is the Id of the virtual device .</li>
+<li><code>msg.payload.properties</code> is an object with the properties and values of the newly created virtual device (e.g. {temperature: 20}).</li>
+</ul>
+</ul>
+</li>
+</p>
+
+</script>
+
+
+
+<script type="text/javascript">
+$.getScript('simulatedDevice/js/bootstrap-multiselect.js');
+RED.nodes.registerType('device listener',{
+	category: 'Virtual_IoT_Device',
+	color:"#41D6C3",
+	defaults: {
+		monitor: {value: "property"},
+		monitorAll: {value: true},
+		deviceId: {value:""},
+		allDeviceIds: {value: true},
+		allSchemas: {value: true},
+		allProps:  {value: true},
+		schema: {type:"Device Schema", required: false, validate:
+		function(v) {
+			return ( ( (v === '_ADD_')  && ($("#node-input-allSchemas").is(":checked") === false) && ($("#node-input-allProps").is(":checked") === false) )  === false);
+		}},
+		props: {value: []},
+		name: { value:"" }
+	},
+	inputs:0,
+	outputs:1,
+	icon: "vdMonitor.png",
+	label: function() {
+		var label = this.name;
+		if(!label) {
+			if(this.monitorAll){
+				return "Device Listener";
+			}
+			switch (this.monitor) {
+				case "property":
+				label = "On Device Property Change";
+				break;
+				case "start":
+				label = "On Device Start";
+				break;
+				case "stop":
+				label = "On Device Stop";
+				break;
+				case "schema":
+				label = "On Device Schema Deployed";
+				break;
+			}
+		}
+		return label;
+	},
+	labelStyle: function() {
+		return this.name ? "node_label_italic" : "";
+	},
+	oneditsave: function() {
+		this.props = $("#node-input-props")
+		.find("option:selected")
+		.map(function(a, item){return item.value;}).toArray();
+	},
+	oneditprepare: function() {
+		var _this = this;
+
+
+		function populatePropertiesFromSchema(schemaId){
+			//get selected
+			var selectedProps = $("#node-input-props")
+			.find("option:selected")
+			.map(function(a, item){return item.value;}).toArray();
+			//remove all options
+			$("#node-input-props").find("option").remove()
+
+			if(!schemaId || schemaId === "") return;
+			RED.nodes.eachConfig(function(config) {
+				if(schemaId === config.id){
+					for (var i=0; i<config.props.length; i++) {
+						var prop = config.props[i];
+						$("#node-input-props").append($('<option>', {
+							value: prop.guid,
+							text: prop.name
+						}));
+					}
+				}
+			});
+			var allPrpschecked = $("#node-input-allProps").is(":checked");
+			$("#node-input-props")
+			$("#node-input-props").multiselect('rebuild')
+			.multiselect('select', selectedProps)
+			.multiselect('refresh')
+			.multiselect((allPrpschecked)?'disable': 'enable');
+		}
+
+		$("#node-input-props").multiselect({
+			includeSelectAllOption: false,
+			disableIfEmpty: true,
+			disabledText: 'Choose Properties',
+			nonSelectedText: 'Select Properties',
+			allSelectedText: 'All Properties',
+			numberDisplayed: 10
+		});
+
+		$("#node-input-monitor").change(function(){
+			var allSchemasChecked = $("#node-input-allSchemas").is(":checked");
+			var monitorType = $("#node-input-monitor").val();
+			var showPrp = (monitorType === "property" && !allSchemasChecked);
+			(showPrp)? $("#node-input-props-div").show() : $("#node-input-props-div").hide();
+			var showId = (monitorType !== "schema" && !allSchemasChecked);
+			(showId)? $("#node-input-deviceId-div").show() : $("#node-input-deviceId-div").hide();
+		});
+
+		$("#node-input-schema").change(function() {
+			var schemaId = $("#node-input-schema").val();
+			populatePropertiesFromSchema(schemaId);
+		});
+
+		$("#node-input-allProps").change(function(){
+			var checked = $("#node-input-allProps").is(":checked");
+			$("#node-input-props").multiselect((checked)?'disable': 'enable');
+		});
+
+		$("#node-input-allDeviceIds").change(function(){
+			var checked = $("#node-input-allDeviceIds").is(":checked");
+			$("#node-input-deviceId").prop("disabled", checked);
+		});
+
+		$("#node-input-monitorAll").change(function(){
+			var checked = $("#node-input-monitorAll").is(":checked");
+			$("#node-input-monitor").prop("disabled", checked);
+			var allSchemasChecked = $("#node-input-allSchemas").is(":checked");
+			var monitorType = $("#node-input-monitor").val();
+			var showPrp = ((monitorType === "property" || checked) && !allSchemasChecked);
+			(showPrp)? $("#node-input-props-div").show() : $("#node-input-props-div").hide();
+		});
+
+		$("#node-input-allSchemas").change(function(){
+			var allSchemasChecked = $("#node-input-allSchemas").is(":checked");
+			$("#node-input-schema").prop("disabled", allSchemasChecked);
+			//hide/show id & properties selection
+			var monitorType = $("#node-input-monitor").val();
+			var showPrp = (!allSchemasChecked && monitorType === "property");
+			var showId = (monitorType !== "schama" && !allSchemasChecked);
+			(showPrp) ? $("#node-input-props-div").show() : $("#node-input-props-div").hide();
+			(showId) ? $("#node-input-deviceId-div").show() : $("#node-input-deviceId-div").hide();
+		});
+
+
+
+		populatePropertiesFromSchema(_this.schema);
+		$("#node-input-props").multiselect('select', _this.props)
+		$("#node-input-monitor").change();
+		$("#node-input-allProps").change();
+		$("#node-input-allDeviceIds").change();
+		$("#node-input-allSchemas").change();
+
+
+	}
+});
+
+</script>

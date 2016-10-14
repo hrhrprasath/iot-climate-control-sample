@@ -1,0 +1,294 @@
+<script type="text/x-red" data-template-name="device-manager">
+
+    <div class="form-row">
+        <label for="node-input-auth"><!-- <i class="fa fa-unlock"> --></i>Authentication</label>
+        <select type="text" id="node-input-auth" style="width:72%;">
+            <option value="bluemix">Bluemix Service</option>
+            <option value="api" >API Key</option>
+        </select>
+    </div>
+
+    <div class="form-row" id = "node-input-apiKey-div">
+        <label for="node-input-apiKey" id="node-input-apiKeyLabel"><i class="fa fa-key"></i> API Key</label>
+        <input type="text" id="node-input-apiKey" placeholder="API Key" style="width:300px;">
+    </div>
+
+    <div class="form-row" id="node-form-row-deviceType">
+        <label for="node-input-deviceType"><i class="fa fa-sitemap"></i> Device Type</label>
+        <select type="text" list="exampleList" id="node-input-deviceType" style="width: 260px;">
+            <option value=""></option>
+        </select>
+
+        <a class="editor-button" id="node-input-deviceType-link" href="#" target="_new"><i class="fa fa-external-link" /></a>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-method"><i class="fa fa-cogs"></i> Operation</label>
+        <select type="text" id="node-input-method" style="width:72%;">
+            <option value="GetAll">List Devices on Watson IoT Platform</option>
+            <option value="Create" >Add a Device for a specific Device Type</option>
+            <option value="Get">Get the Device with the supplied Device Id</option>
+            <option value="Update">Update the Device with the supplied Device Id</option>
+            <option value="Delete">Delete the Device with the supplied Device Id</option>
+            <option value="GetLoc">Get Device location details</option>
+            <option value="UpdateLoc">Update Device location details</option>
+            <option value="GetDm">Get Device management information</option>
+            <!-- <option value="Get all gw">List all devices that are connected via a gateway</option> -->
+        </select>
+    </div>
+
+    <div class="form-row" id="dev-id-cont">
+        <label for="node-input-deviceId"><i class="fa fa-plug"></i> Device Id</label>
+        <input type="text" id="node-input-deviceId" placeholder="e.g device1"  >
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('device-manager',{
+        category: 'Watson IoT',
+        color: '#89679A',
+        defaults: {
+            auth : { value : "bluemix" },
+            name : { value : "" },
+            apiKey : {
+                type : "wiotp",
+                required: false,
+                validate: function(v) {
+                    var auth = $("#node-input-auth").val() || this.auth;
+                    return auth === 'bluemix' || (v != '' && v!='_ADD_');
+                }
+            },
+            deviceType : { value : "" },
+            method : {value:  "GetAll"},
+            deviceId : { value : "" },
+            password : { value : "" }
+        },
+        inputs:1,
+        outputs:1,
+        icon: "device-manager.png",
+        label: function() {
+            return this.name || this.deviceId || "device manager";
+        },
+        oneditprepare: function() {
+            var selectedDt = this.deviceType;
+
+            function updateContent() {
+                // make a call to the runtime to get the valid devicetypes
+
+                $.getJSON('devicefactory/gettypes',function(data) {
+                    //get the list of device types
+
+                    var deviceTypeSelect = $('#node-input-deviceType');
+                    deviceTypeSelect.html('<option value=""></option>');
+                    if(data) {
+
+                        var items = data.results;
+                        $.each(items, function (i, item) {
+                            deviceTypeSelect.append($('<option>', {
+                                value: item.id,
+                                text : item.id
+                            }));
+                        });
+                    }
+
+                    if(selectedDt) {
+                        deviceTypeSelect.val(selectedDt);
+                    }
+                });
+                //update the link to the wiotp dashboard
+                $.getJSON('devicefactory/orgid',function(data) {
+                    $("#node-input-deviceType-link").attr('href','https://'+data+'.internetofthings.ibmcloud.com/dashboard/#/devices/deviceTypes');
+                });
+            }
+
+            //updateContent();
+
+            $("#node-input-apiKey").on('change', function(){
+                var authValue = $('#node-input-auth').val();
+                var credsKey = $("#node-input-apiKey").val();
+
+                if(authValue === 'api' && credsKey && credsKey !== "_ADD_") {
+                    var wiotpConfig = RED.nodes.node(credsKey);
+
+                    $.post('devicefactory/newapikey', {
+                        "id" : wiotpConfig.id,
+                        "credentials" : wiotpConfig.credentials
+                    } , function(data) {
+                        updateContent();
+                    });
+                }
+
+            });
+
+            $("#node-input-method").on('change', function(){
+                if(this.value === "GetAll"){
+                    $("#dev-id-cont").hide();
+                }else {
+                    $("#dev-id-cont").show();
+                }
+
+            });
+
+            $("#node-input-auth").on('change', function(){
+                if(this.value === "bluemix"){
+                    $("#node-input-apiKey-div").hide();
+
+                        $.get('devicefactory/getbluemixtypes',function(data) {
+                            // update the content of devicetype and orgId
+                            updateContent();
+
+                        });
+
+                } else {
+                    $("#node-input-apiKey-div").show();
+                    var credsKey = $("#node-input-apiKey").val();
+
+                    if(credsKey && credsKey !== "_ADD_") {
+                        var wiotpConfig = RED.nodes.node(credsKey);
+
+                        $.post('devicefactory/newapikey', {
+                            "id" : wiotpConfig.id,
+                            "credentials" : wiotpConfig.credentials
+                        } , function(data) {
+                            updateContent();
+                        });
+                    }
+                }
+
+            });
+
+        },
+        oneditsave: function() {
+            var auth = $("#node-input-auth").val();
+            if (auth === 'bluemix') {
+                $("#node-input-apiKey").val('_ADD_');
+            }
+
+        }
+
+    });
+</script>
+
+<script type="text/x-red" data-help-name="device-manager">
+    <p>This node lets you perform actions on devices that are connected to IBM Watson IoT Platform</p>
+    <p>
+    <dl>
+    <dt>Authentication</dt>
+    <dd>Authentication type: <br/>
+        <ol>
+        <li><i>Bluemix Service</i> - Use the Watson IoT service bound to this application</li>
+        <li><i>API Key</i> - Use a  Watson IoT Platform API key from your organization of</li>
+        </ol>
+    </dd>
+    <dt>Device Type</dt>
+    <dd>Lists the device types that are present in your organization. Follow the link to create new device types in the Watson IoT Dashboard.
+    You can also pass this value from a payload by using <code>msg.payload.deviceType</code>. However, values that are present in the configuration takes precedence.</dd>
+    <dt>Device Operation</dt>
+    <dd>Operations that can be performed on the device on Watson IoT Platform. For more information, see <a target="_blank" href="https://docs.internetofthings.ibmcloud.com/swagger/v0002.html#!/Devices/">the devices API documentation</a>. You can also pass the value from a <i>msg</i> by using <code>msg.operation</code>. <br/>
+    The following values are supported:
+    <ul>
+    <li>GetAll</li>
+    <li>Create</li>
+    <li>Get</li>
+    <li>Update</li>
+    <li>Delete</li>
+    <li>GetLoc</li>
+    <li>UpdateLoc</li>
+    <li>GetDm</li>
+    </ul>
+    <br/>
+To pass the pass the values dynamically, you must pass the input in <code>msg.payload</code>. <br/><br/>
+For example, to create a device, pass the following JSON in <code>msg.payload</code>
+            <pre>
+    {
+        "deviceId": "string",
+        "authToken": "string",
+        "deviceInfo": {
+            "serialNumber": "string",
+            "manufacturer": "string",
+            "model": "string",
+            "deviceClass": "string",
+            "description": "string",
+            "fwVersion": "string",
+            "hwVersion": "string",
+            "descriptiveLocation": "string"
+        },
+        "location": {
+            "longitude": 0,
+            "latitude": 0,
+            "elevation": 0,
+            "accuracy": 0,
+            "measuredDateTime": "2016-08-07T18:50:51.553Z"
+        },
+        "metadata": {}
+    }
+    </pre><br/>
+
+        If you want to use the <a target="_blank" href="https://docs.internetofthings.ibmcloud.com/swagger/v0002.html#!/Bulk_Operations"> bulk create/delete </a> operations, pass the the input as an array in <code>msg.payload</code>.
+        <pre>
+    [
+      {
+        "typeId": "RaspberryPi",
+        "deviceId": "pi01"
+      },
+        {
+        "typeId": "RaspberryPi",
+        "deviceId": "pi02"
+      }
+    ]
+    </dd>
+    </dl>
+
+
+    </p>
+</script>
+
+<!-- Node for storing the apikey and auth token creds -->
+<script type="text/x-red" data-template-name="wiotp">
+    <div class="form-row">
+        <label for="node-config-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-config-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-user"><i class="fa fa-user-secret"></i> API Key</label>
+        <input type="text" id="node-config-input-user">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-pass"><i class="fa fa-lock"></i> API Token</label>
+        <input type="password" id="node-config-input-password">
+    </div>
+
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('wiotp',{
+        category : 'config',
+        color : "#8087a9",
+        defaults : {
+            name : { value:"" },
+
+        },
+
+        label: function() {
+            return this.name;
+        },
+
+        credentials: {
+            user: {type:"text"},
+            password: {type:"password"}
+        }
+    });
+</script>
+
+<script type="text/x-red" data-help-name="wiotp">
+    <p> Input your API-KEY and Authentication Token of your Watson IoT Platform. </p>
+
+    <p> You can generate your API-KEY from the dashboard of Watson IoT. Click <a target="_blank" href="http://internetofthings.ibmcloud.com/"> here</a> to navigate to Watson IoT Dashboard. In the dashboard, go to the Access Tab, then API Keys. Click <b>Generate API Key</b>.
+</script>
