@@ -126,5 +126,17 @@ app.get('/qr', function(req, res) {
   }
 });
 
+// Use Cf environment variable to find the bluemix region
+app.get('/bluemixregion', function(req, res) {
+	// Get the region from the VCAP env variables
+	var region = process.env.BLUEMIX_REGION;
+	if(region) {
+		res.status(200).send(region);
+	}
+	else {
+		res.status(400).send("Bluemix Region not found");
+		}
+});
+
 // Start the runtime
 RED.start();
