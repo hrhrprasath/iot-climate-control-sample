@@ -107,6 +107,9 @@ httpServer.listen( port, function(){
     console.log('App listening on port: ', port);
 });
 
+//Track Deployment
+require("cf-deployment-tracker-client").track();
+
 // Use qr-image to generate QR for the link
 app.get('/qr', function(req, res) {
   // get the url from the query param "url"

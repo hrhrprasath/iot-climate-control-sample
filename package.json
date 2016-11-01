@@ -1,6 +1,6 @@
 {
   "name"         : "iot-tooling",
-  "version"      : "0.0.1",
+  "version"      : "0.0.2",
   "description"  :  "IoT tooling based on Node-RED",
   "contributors":
   [
@@ -44,7 +44,8 @@
     "chance": "*",
     "is-utf8": "^0.2.1",
     "qr-image" : "~3.1.0 ",
-    "basic-auth-connect" : "~1.0.0"
+    "basic-auth-connect" : "~1.0.0",
+    "cf-deployment-tracker-client": "*"
   },
   "engines": {
     "node": "0.12.x"
