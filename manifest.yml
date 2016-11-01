@@ -10,7 +10,7 @@ applications:
 declared-services:
   iottool-cloudantNoSQLDB-devx:
     label: cloudantNoSQLDB
-    plan: Shared
+    plan: Lite
   iottool-IoT-devx:
     label: iotf-service
     plan: iotf-service-free
