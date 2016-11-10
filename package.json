@@ -46,7 +46,9 @@
     "qr-image" : "~3.1.0 ",
     "basic-auth-connect" : "~1.0.0",
     "cf-deployment-tracker-client": "*",
-	"node-red-contrib-ibm-wiotp-device-ops" :"*"
+	"node-red-contrib-ibm-wiotp-device-ops" :"*",
+	"node-red-contrib-iot-virtual-device":"*",
+	"node-red-contrib-scx-ibmiotapp":"*"
   },
   "engines": {
     "node": "0.12.x"
